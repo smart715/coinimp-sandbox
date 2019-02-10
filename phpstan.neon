@@ -1,0 +1,28 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+
+    paths:
+        - src
+        - tests
+
+    level: 4
+
+    symfony:
+        container_xml_path: %rootDir%/../../../var/cache/dev/srcDevDebugProjectContainer.xml
+
+    excludes_analyse:
+        # Magic DateTime referance
+        - %rootDir%/../../../tests/DataSource/FakeNetworkCache.php
+        # Magic properties. TODO: make an extension
+        - %rootDir%/../../../src/Validator/Constraints/*
+
+    ignoreErrors:
+        # To make life easier with symfony containers
+        - '#Property (.*) does not accept object.#'
+        - '#Property (.*) does not accept Doctrine\\Common\\Persistence\\ObjectRepository.#'
+        - '#Negated boolean is always true.#'
+        - '#Call to an undefined method Doctrine\\Common\\Persistence\\ObjectRepository::[a-zA-Z0-9_]+\(\).#'

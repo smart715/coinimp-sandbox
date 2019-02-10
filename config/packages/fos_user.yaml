@@ -1,0 +1,16 @@
+# FOSUserBundle Configuration. It is used for automating authentication
+# and registration of our users.
+fos_user:
+    db_driver: orm # Use Doctrine ORM
+    firewall_name: main
+    user_class: App\Entity\User
+    registration:
+        form:
+            type: App\Form\RegistrationType
+        confirmation:
+            enabled: true
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
+    group:
+        group_class: Sonata\UserBundle\Entity\BaseGroup

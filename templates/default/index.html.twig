@@ -1,0 +1,329 @@
+{% extends 'base.html.twig' %}
+
+{% block contentClass %}landing-page{% endblock %}
+
+{% block content %}
+    <section id="main-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xs-12 col-md-10 text-center">
+                    <h1 class="main-header" data-aos="fade-up"><span>Free</span> JavaScript Mining - Browser Mining</h1>
+                    <h2 class="main-header" data-aos="fade-up" data-aos-delay="300">Use our JavaScript Web Miner and <span>earn money</span> with your page traffic!</h2>
+                </div>
+                <div class="col-xs-12 col-md-10 mt-4 text-center">
+                    <p data-aos="fade-up" id="main-subtitle" data-aos-delay="700">Your users will enjoy an ad-free experience when running the script in their browsers as they mine cryptocurrency for you. This is the most unique offer on the market - a completely free script for web miners! We do take a fee of 1%, but you can gain a rebate (and more!) through our <a href="{{ path('referral') }}">Referral Program</a>! So this is a powerful solution for JavaScript mining at effective <span>0%</span> of your total hash rate!</p>
+                </div>
+                <div class="col-12 text-center mt-2">
+                    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-primary" data-aos="fade-up" data-aos-delay="1000" data-aos-anchor="#main-section">Start mining now!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="landing">
+        <section id="website_information-section">
+
+            <div class="container">
+
+                <div class="row" data-aos="fade-up">
+
+                    <div class="col-lg-3 col-md-12">
+                        <div class="d-flex justify-content-center">
+                            <span class="icon icon-users"> </span>
+                            <span class="website_information-block pt-1_3">
+                                <span v-cloak>
+                                    <span class="font-weight-bold">{[ registeredUsersCount ]}</span>
+                                </span>
+                                Registered Users
+                            </span>
+                            <input type="hidden" id="users-count-refresh-rate" value="{{ global_usersCountRefreshRate }}">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12 pl-lg-5">
+                        <div class="d-flex justify-content-center">
+                            <span class="icon icon-paid"> </span>
+                            <span class="website_information-block">
+                                <span v-cloak>
+                                    <span class="font-weight-bold">{[ totalXmr ]}</span> XMR &
+                                    <span class="font-weight-bold">{[ totalWeb ]}</span> WEB paid,<br>
+                                    worth <span class="font-weight-bold">{[ totalWorth|toRate ]}</span> USD
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5 col-md-12">
+                        <div class="d-flex justify-content-center">
+                            <span class="icon icon-views"> </span>
+                            <span class="website_information-block">
+                                <span v-cloak>
+                                    <span>Our script is embedded on websites<br>
+                                        with <span class="font-weight-bold">{{ global_totalEmbeddedScriptViews }}</span>
+                                        views per month
+                                        </span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section id="definition-section">
+        <div class="container">
+            <div class="row" id="coinimp-def">
+                <div class="col-12 text-center">
+                    <h2 data-aos="fade-down">What is Coin<span class="imp-color">IMP</span>?</h2>
+                </div>
+                <div class="col-xs-12 col-lg-8 align-self-end" data-aos="fade-right">
+                    <p>Coin<span class="imp-color">IMP</span> is the new effective JavaScript miner that can be easily embedded in your website. Browser mining is an excellent alternative to ads. This way web mining users will pay you with their CPU power for accessing your content.</p>
+                    <p>With Coin<span class="imp-color">IMP</span>, Monero and Webchain are mined by using your visitors' CPU resources which otherwise would be wasted. Why not Bitcoin, Ethereum or any other? Because Monero's value is quite high and can be mined with similar efficiency by CPU and GPU that mining other cryptocurrencies with CPU makes no financial sense. Webchain shares that CPU profitability feature and it's a new coin with a value on the cryptocurrency market that is expected to grow.</p>
+                    <p>Our JavaScript miner has more advantages than other JavaScript mining solutions. Coin<span class="imp-color">IMP</span> web miner isn't blocked by Anti-Viruses or AdBlockers and if it eventually gets blocked, we react and work hard to unblock it. We think responsible web browser mining will be part of the future ad market.</p>
+                </div>
+                <div class="col-xs-12 col-lg-4" data-aos="zoom-in">
+                    <img src="{{ asset('build/images/main-mascot.png') }}" class="imp-img img-fluid mx-auto d-block" alt="coinimp javascript web miner">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="properties-section" class="pt-4 pb-5">
+        <div class="container">
+                <div class="col-12 text-center">
+                    <h2 data-aos="fade-down">We offer you two currencies to mine</h2>
+                </div>
+ <div class="row mt-4">
+   <div class="col-6 rightcol">
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon mt-4 mb-5">
+                        <img src="{{ asset('build/images/monero-logo.png') }}" alt="MONERO">
+                    </div>
+                </div>
+            </div>
+  </div>
+  <div class="col-6 leftcol">     
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                
+                    <a href="https://webchain.network/" target="_blank">
+                        <div class="homeicon mt-4 mb-5">
+                            <img src="{{ asset('build/images/webchain-logo.png') }}" alt="webchain.network">
+                        </div>
+                    </a>
+                </div>
+            </div>
+   </div>
+ </div>          
+  <div class="row">
+  <div class="col-6 rightcol">
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/full-anonymity.png') }}" alt="Full anonymity">
+                    </div>
+                    <h2 class="title mb-0">Full anonymity</h2>
+                    <p>Your wallet address never appears on the public blockchain and nobody knows how many coins you have. In a world where big corporations trade, your privacy is an important factor.</p>
+                </div>
+            </div>
+  </div>
+  <div class="col-6 leftcol">     
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/transparent.png') }}" alt="Transparent">
+                    </div>
+                    <h2 class="title mb-0">Transparent</h2>
+                    <p>Webchain project wants to make web mining more secure and transparent for everyone. Thanks to its open transactions, it will never be a friendly place for botnet or hacker activities.</p>
+                </div>
+            </div>
+   </div>
+ </div>
+  <div class="row">
+  <div class="col-6 rightcol">
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/tradable.png') }}" alt="Tradable">
+                    </div>
+                    <h2 class="title mb-0">Tradable</h2>
+                    <p>Monero is traded on many exchanges. Change it easily for BTC or USD to afford mining costs.</p>
+                </div>
+            </div>
+  </div>
+  <div class="col-6 leftcol">     
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/new-coin.png') }}" alt="New coin">
+                    </div>
+                    <h2 class="title mb-0">New coin</h2>
+                    <p>Webchain is a new coin and is traded only on few exchanges, we advise you to mine it and HODL it.</p>
+                </div>
+            </div>
+   </div>
+ </div>          
+  <div class="row">
+  <div class="col-6 rightcol">
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/limitless.png') }}" alt="Limitless">
+                    </div>
+                    <h2 class="title mb-0">Limitless</h2>
+                    <p>Monero is virtually infinite. Miners can always get at least 0.3 XMR per block so there won't be a shortage of rewards.</p>
+                </div>
+            </div>
+  </div>
+  <div class="col-6 leftcol">     
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/limited-supply.png') }}" alt="Limited supply">
+                    </div>
+                    <h2 class="title mb-0">Limited supply</h2>
+                    <p>Webchain has a limited supply of coins. That means its value will increase over time.</p>
+                </div>
+            </div>
+   </div>
+ </div>
+   <div class="row">
+  <div class="col-6 rightcol">
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/speed.png') }}" alt="Average speed transactions">
+                    </div>
+                    <h2 class="title mb-0">Average speed transactions</h2>
+                    <p>Compared to Bitcoin's 10 min, Monero's 2 min transactions are quite fast and enough for the most typical usage.</p>
+                </div>
+            </div>
+  </div>
+  <div class="col-6 leftcol">     
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/super-fast.png') }}" alt="Super fast transactions">
+                    </div>
+                    <h2 class="title mb-0">Super fast transactions</h2>
+                    <p>Webchain's ~10 sec block time is among the fastest. This creates an opportunity for additional uses, for example direct payments.</p>
+                </div>
+            </div>
+   </div>
+ </div>
+    <div class="row">
+  <div class="col-6 rightcol">
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/no-smart-contracts.png') }}" alt="No smart contracts">
+                    </div>
+                    <h2 class="title mb-0">No smart contracts</h2>
+                    <p>While it has no smart contracts functionality, it doesn’t actually need one. Its purpose of a fully anonymous, private and safe cryptocurrency is more than enough.</p>
+                </div>
+            </div>
+  </div>
+  <div class="col-6 leftcol">     
+            <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/smart-contracts.png') }}" alt="Smart contracts and DApps">
+                    </div>
+                    <h2 class="title mb-0">Smart contracts and DApps</h2>
+                    <p>Webchain is ready to be the base for other projects. It is ERC20 and ERC223 compliant and supports smart contracts, which is the future of cryptocurrencies.</p>
+                </div>
+            </div>
+   </div>
+ </div>
+             <div class="row firstrow" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/open-source.png') }}" alt="Open source">
+                    </div>
+                    <h2 class="title mb-0">Open source</h2>
+                    <p>Both projects are open source, it’s easy for any programmer to see what is going on inside the code.</p>
+                </div>
+            </div>
+             <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/cpu-minable.png') }}" alt="CPU minable">
+                    </div>
+                    <h2 class="title mb-0">CPU minable</h2>
+                    <p>Monero and Webchain use different versions of CryptoNight, but they both share the same quality - GPU mining is not much more profitable than CPU mining on any of them. This makes JavaScript mining profitable.</p>
+                </div>
+            </div>
+             <div class="row" data-aos="fade-down">
+                <div class="col-12 text-center">
+                    <div class="homeicon">
+                        <img src="{{ asset('build/images/asic-resistance.png') }}" alt="ASIC resistance">
+                    </div>
+                    <h2 class="title mb-0">ASIC resistance</h2>
+                    <p>Both projects announced they would fight any ASIC mining in their networks by continuously tweaking hashing algorithms to make ASIC production unprofitable.</p>
+                </div>
+            </div>            
+    </div>
+</section>
+    <section id="recent-payment-section">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12 mb-2">
+                    <h2>Our Recent Payments</h2>
+                </div>
+                <div class="col-md-12 table-responsive-xl">
+                    <table class="table table-nowrap">
+                        <thead class="thead-dark font-weight-bold">
+                        <tr>
+                            <th>Time Sent</th>
+                            <th>Transaction Hash</th>
+                            <th>Amount</th>
+                            <th>Currency</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for payment in recentPayments %}
+                            <tr>
+                                <td>{{ payment.date|ago }}</td>
+                                <td>
+                                    {% if payment.id matches '/^(0x)?([A-Fa-f0-9]{64})$/' %}
+                                    <a href="{{ payment.explorerUrl }}/{{ payment.id }}" rel="nofollow" target="_blank">
+                                        {{ payment.id }}
+                                    </a>
+                                    {% else %}
+                                        <span>unknown</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ payment.amount|toXMR }}</td>
+                                <td>{{ payment.crypto|upper }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="howto-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xs-12 col-md-9 text-center">
+                    <h2 data-aos="fade-up">How to start JavaScript mining?</h2>
+                </div>
+                <div class="col-xs-12 col-md-10 mt-4 text-center">
+                    <p data-aos="fade-up">It's very easy... Create a Coin<span class="imp-color">IMP</span> account and add the Coin<span class="imp-color">IMP</span> code to your website. It's free and you can find it in our Dashboard. That's it! &mdash; Just relax and enjoy your earnings...</p>
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-primary" data-aos="fade-up">Start mining now!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('build/index.js') }}"></script>
+{% endblock %}

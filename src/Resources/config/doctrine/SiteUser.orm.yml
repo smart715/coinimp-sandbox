@@ -1,0 +1,18 @@
+App\Entity\SiteUser:
+    type: entity
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    manyToOne:
+        site:
+            targetEntity: App\Entity\Site
+            inversedBy: users
+
+    fields:
+        name: { type: string }
+        withdrawn: { type: bigint }
+        hashes: { type: bigint }

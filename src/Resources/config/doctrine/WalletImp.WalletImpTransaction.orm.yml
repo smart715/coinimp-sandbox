@@ -1,0 +1,41 @@
+App\Entity\WalletImp\WalletImpTransaction:
+    type:  entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: "wallet_imp_transaction"
+
+    id:
+        id:
+            type: integer
+            generator:
+              strategy: AUTO
+
+
+    manyToOne:
+        wallet:
+            targetEntity: WalletImp
+            inversedBy: transactions
+            JoinColumn:
+              nullable: false
+
+    fields:
+        name:
+            type: string
+            length: 255
+
+        description:
+            type: text
+            nullable: true
+
+        amount:
+            type: bigint
+
+        type:
+            type: string
+            columnDefinition: ENUM('add', 'sub', 'freeze')
+
+        data:
+            type: array
+
+        created:
+            type: datetime
+            columnDefinition: DATETIME default CURRENT_TIMESTAMP

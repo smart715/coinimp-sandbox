@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{% spaceless %}
+    About | CoinIMP
+{% endspaceless %}
+{% endblock %}
+{% block contentClass %}landing-page{% endblock %}
+{% block content %}
+
+<section id="main-section">
+        <div class="container about" id="icons">
+            <div class="row">
+                <div class="col-12 mx-auto">
+                    <h1 data-aos="fade-up">About Coin<span class="imp-color">IMP</span></h1>
+                    <p data-aos="fade-up" data-aos-delay="300">Coin<span class="imp-color">IMP</span> service was released back in 2017, with the purpose of providing the most profitable mining solutions to our clients. Not too long after that, we've reached lots of users and we're considered among the best and most reliable JavaScript mining service providers in the world.</p>
+                </div>
+            </div>
+            <div class="row col-12 mx-auto mt-5">
+                <div class="col-xs-12 col-lg-3" data-aos="zoom-in" data-aos-delay="600">
+                    <img src="{{ asset('build/images/main-mascot-r.png') }}" class="ico-img img-fluid d-block mx-auto"  alt="coinimp javascript web miner">
+                </div>
+                <div class="col-xs-12 col-lg-9">
+                <ul class="falist fa-ul mt-4">
+                    <li data-aos="fade-up pb-2"><span class="fa-li" ><font-awesome-icon icon="check"></font-awesome-icon></span>Easy-to-embed JS miner</li>
+                    <li data-aos="fade-up pb-2" data-aos-delay="300"><span class="fa-li" ><font-awesome-icon icon="check"></font-awesome-icon></span>A transparent alternative to ads</li>
+                    <li data-aos="fade-up pb-2" data-aos-delay="700"><span class="fa-li" ><font-awesome-icon icon="check"></font-awesome-icon></span>Your site visitors provide CPU power in exchange for enjoying your content and tools</li>
+                    <li data-aos="fade-up pb-2" data-aos-delay="1000"><span class="fa-li" ><font-awesome-icon icon="check"></font-awesome-icon></span>Available coins can be mined by CPU and GPU with similar proven profitability</li>
+                    <li data-aos="fade-up pb-2" data-aos-delay="1300"><span class="fa-li" ><font-awesome-icon icon="check"></font-awesome-icon></span>Our website miner isn't blocked by anti-viruses or Ad blockers</li>
+                </ul>
+                </div>
+            </div>
+            <div class="row pt-3" data-aos="fade-down">
+                <div class="col-3 col-12 mx-auto">
+                        <div class="col-xs-6 col-lg-3 p-4 mx-auto">
+                            <img src="{{ asset('build/images/monero-logo.png') }}" alt="MONERO" class="ico-img img-fluid d-block mx-auto">
+                        </div>
+                    <p class="text-center">Our JS mining service was released as a Monero-only miner, an open source private and egalitarian Cryptocurrency using CryptoNote technology.</p>
+                </div>
+            </div>
+            <div class="row pt-3" data-aos="fade-down">
+                <div class="col-12 mx-auto">
+                    <a href="https://webchain.network/" target="_blank" rel="nofollow">
+                        <div class="col-xs-6 col-lg-3 p-4 mx-auto">
+                            <img src="{{ asset('build/images/webchain-logo.png') }}" alt="webchain.network" class="ico-img img-fluid d-block mx-auto">
+                        </div>
+                    </a>
+                    <p class="text-center">Less than a year later, we included Webchain, a fully traceable CPU mineable coin, supported by its own blockchain, designed with a unique code that combines ETC interface and a customized CryptoNight version as its hashing function in order to remain egalitarian.</p>
+                </div>
+            </div>
+            <div class="row pt-3" data-aos="fade-down">
+                <div class="col-12 mx-auto">
+                    <a href="{{ path('buy') }}" target="_blank">
+                        <div class="col-xs-6 col-lg-3 p-4 mx-auto">
+                            <img src="{{ asset('build/images/imp-logo.svg') }}" alt="IMP" class="ico-img img-fluid d-block mx-auto">
+                        </div>
+                    </a>
+                    <p class="text-center">Then we decided to undertake a new project focused on website owners and advertisers, our own Webchain-based utility token called IMP, a digital asset designed to fuel a content promotion platform that represents an advertising revolution in web monetization.</p>
+                </div>
+            </div>
+            <div class="row pt-3" data-aos="fade-down">
+                <div class="col-12 mx-auto">
+                    <a href="{{ path('homepage') }}" target="_blank">
+                        <div class="col-xs-6 col-lg-3 p-4 mx-auto">
+                            <img src="{{ asset('build/images/main-logo.png') }}" alt="COINIMP" class="ico-img img-fluid d-block mx-auto">
+                        </div>
+                    </a>
+                    <p class="text-center">Our team is always working towards the best and most profitable tools for our users, so you can expect more news from us!</p>
+                </div>
+            </div>
+        </div>
+</section>
+<input type="hidden" id="users-count-refresh-rate" value="{{ global_usersCountRefreshRate }}">
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('build/index.js') }}"></script>
+{% endblock %}

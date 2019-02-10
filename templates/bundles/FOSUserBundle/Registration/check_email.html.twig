@@ -1,0 +1,16 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block contentClass %}check-email{% endblock %}
+
+{% block fos_user_content %}
+    <div class="container">
+        <div class="row py-3">
+            <div class="col text-center">
+                <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+		<p>Do not forget to check your spam folder</p>
+            </div>
+        </div>
+    </div>
+{% endblock fos_user_content %}

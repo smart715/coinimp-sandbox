@@ -1,0 +1,327 @@
+{% extends 'base.html.twig' %}
+
+{% block logo %}
+    <img src="{{ asset('build/images/imp-logo.svg') }}" height="40" alt="CoinIMP javascript mining logo">
+{% endblock %}
+{% block contentClass %}buy{% endblock %}
+
+{% block content %}
+<div id="buy">
+    <section class="wallet-section py-5">
+        <div class="container">
+            {% if connectionToApiFailed %}
+                <div class="alert alert-warning">
+                    Failed to connect to the API, try again.
+                </div>
+            {% endif %}
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-5 mt-4 mt-lg-0 order-2 order-lg-1">
+                    <img src="{{ asset('build/images/hero-wallet.png') }}" class="img-fluid" alt="coinimp wallet">
+                </div>
+                <div class="col-12 col-lg-7 order-1 order-lg-2">
+                    <div class="d-lg-inline-block wallet-heading">
+                        <span class="text-center text-lg-left">You have</span>
+                        <span class="lead text-center text-lg-left">
+                            <div class="d-inline" v-cloak>
+                                <b ref="availableImp" data-imp-init-amount="{{ availableImp }}">{[ availableImp | toFixed(0) ]}</b>
+                            </div>
+                            <span>IMP</span>
+                        </span>
+                        <span class="text-center text-lg-right">in your account</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="imp-price-section" class="py-3 text-white ">
+        <div class="container">
+            <div class="text-white col-12 text-center">
+                <span class="title">
+                    1 IMP (bought during token sale) = {{ global_imp_price_in_usd }} USD = 1000 impressions
+                </span>
+            </div>
+        </div>
+    </section>
+    <section class="referral-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6 col-xl-6">
+                    <img src="{{ asset('build/images/social-cloud.png') }}" class="img-fluid">
+                </div>
+                <div class="col-12 col-lg-6 mt-4 mt-lg-0 text-center">
+                    <div class="referral-heading">
+                        <span>JOIN OUR</span>
+                    </div>
+                    <button class="btn btn-primary my-3" @click="openReferralModal()">Referral Program</button>
+                    <div class="referral-description">
+                        <span>Get a <b>5%</b> commission for each purchase</span>
+                    </div>
+                    <span class="referral-description-subtitle">made by your referred users</span>
+                </div>
+            </div>
+            <referral-modal v-show="showReferralModal" @close="showReferralModal = false" class="primary-modal" id="payment-modal" v-cloak>
+                <div slot="body">
+                    <div class="row">
+                        {% set referralLinkRelative =path('register_ico_referral', { referralCode: referralCode }) %}
+                        {% set referralLink = absolute_url(referralLinkRelative) %}
+                        <div class="col-md-12 appModalBox m-auto p-0 position-relative h-auto">
+                            <div class="modalImgRow">
+                                <img class="img-responsive position-absolute d-none d-lg-inline-block" src="{{ asset('build/images/coinimp_invest-referral.png') }}" alt="Referral Instruction" />
+                            </div>
+                            <div class="appModalHeader text-center text-lg-right text-white font-weight-bold p-2 py-lg-4 px-lg-5">
+                                REFERRAL PROGRAM <span class="d-block font-italic font-weight-normal"> Instructions </span>
+                            </div>
+                            <div class="col-md-12 col-md-push-5 modalContent text-center text-white">
+                                <div>Give your friend this URL</div>
+                                <div class="refURL font-weight-bold"
+                                     data-ref-url="{{referralLink}}"
+                                     @click="refUrlClicked"
+                                     v-tippy="tooltipOptions"
+                                     :title="tooltipMessage"
+                                >
+                                    {{referralLink}}
+                                </div>
+                                <div>Once they have signed up,</div>
+                                <div>you will get a <span class="percent font-weight-bold">5%</span> commission</div>
+                                <div>for each purchase made by your referred user</div>
+                                <div>Simple right?</div>
+                                <div class="howToClose">click anywhere outside the pop-up to close it</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </referral-modal>
+        </div>
+    </section>
+    <section class="payment-section py-5">
+        <div class="container-flud mx-5">
+            <div class="row">
+                <div class="col-12 col-xl-4">
+                    <div class="card">
+                        <div class="card-header-accent d-flex justify-content-between">
+                            <span>Bitcoin</span>
+                            <span v-cloak v-if="currenciesUsdRate.BTC > 0">1 BTC = <span>{[ currenciesUsdRate.BTC / {{ impPriceInUsd }} | toFixed(0) ]}</span> IMP</span>
+                        </div>
+                        <div class="card-body text-center">
+                            <span ref="btcBalance" data-balance="{{ balance.BTC }}" class="card-title">
+                                <span class="d-inline" v-cloak>
+                                    <span>{[ balance.BTC | toFixed(8) ]}</span>
+                                </span>
+                            </span>
+                            <button
+                                class="btn btn-primary btn-deposit"
+                                @click="openDepositModal('bitcoin', 'btc', '{{ btcAddress }}')"
+                            >
+                                Deposit BTC
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4 mt-4 mt-xl-0">
+                    <div class="card">
+                        <div class="card-header-accent d-flex justify-content-between">
+                            <span>Ethereum</span>
+                            <span v-cloak v-if="currenciesUsdRate.ETH > 0">1 ETH = <span>{[ currenciesUsdRate.ETH / {{ impPriceInUsd }} | toFixed(0) ]}</span> IMP</span>
+                        </div>
+                        <div class="card-body text-center">
+                            <span ref="ethBalance" data-balance="{{ balance.ETH }}" class="card-title">
+                                <span class="d-inline" v-cloak>
+                                    <span>{[ balance.ETH | toFixed(8) ]}</span>
+                                </span>
+                            </span>
+                            <button
+                                class="btn btn-primary btn-deposit"
+                                @click="openDepositModal('ethereum', 'eth', '{{ ethAddress }}')"
+                            >
+                                Deposit ETH
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4 mt-4 mt-xl-0">
+                    <div class="card">
+                        <div class="card-header-accent d-flex justify-content-between">
+                            <span>Monero</span>
+                            <span v-cloak v-if="currenciesUsdRate.XMR > 0">1 XMR = <span>{[ currenciesUsdRate.XMR / {{ impPriceInUsd }} | toFixed(0) ]}</span> IMP</span>
+                        </div>
+                        <div class="card-body text-center">
+                            <span ref="xmrBalance" data-balance="{{ balance.XMR }}" class="card-title">
+                                <span class="d-inline" v-cloak>
+                                    <span>{[ balance.XMR | toFixed(8) ]}</span>
+                                </span>
+                            </span>
+                            <button
+                                class="btn btn-primary btn-deposit"
+                                @click="openDepositModal('monero', 'xmr', '{{ xmrAddress }}', '{{ xmrPaymentId }}')"
+                            >
+                                Deposit XMR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <deposit-modal
+                    v-if="showDepositModal"
+                    :currency="activeDepositCurrency"
+                    :currency-symbol="activeDepositCurrencySymbol"
+                    :address="activeDepositAddress"
+                    :payment-id="activeDepositPaymentId"
+                    support-email="{{ global_support_email }}"
+                    @error="handleDepositModalError"
+                    @close="showDepositModal = false"
+                />
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 text-center">
+                    <span class="buy-description">Altcoin values are fetched every 20 seconds from <a href="{{ global_exchange_url }}" target="_blank" rel="noopener noreferrer">{{ global_exchange_name }}</a>. Remember to refresh the page to get current values.</span>
+                </div>
+            </div>
+            <div class="row my-5">
+                <div class="col-12 text-center">
+                    <button
+                        class="btn btn-primary btn-buy"
+                        @click="handleTokenModalShow({{ balance.XMR }}, {{ balance.BTC }}, {{ balance.ETH }})"
+                    >
+                        Get your tokens
+                    </button>
+                </div>
+                <token-modal
+                    v-if="showTokenModal"
+                    :balance="balance"
+                    :currencies-usd-rate="currenciesUsdRate"
+                    :imp-price-in-usd="{{ impPriceInUsd }}"
+                    :available-imp="{{ availableImp }}"
+                    :deposit-url="'{{ depositUrl }}'"
+                    deposit-imp-bonus-packages="{{ global_deposit_imp_bonus_packages | json_encode }}"
+                    :imp-min-amount="{{ depositImpMinAmount }}"
+                    :imp-max-amount="{{ depositImpMaxAmount }}"
+                    :currencies-usd-rate-refresh-duration="currenciesUsdRateRefreshDuration"
+                    :decimals="{{ decimals }}"
+                    @api-response="updateData"
+                    @error="handleTokenModalError"
+                    @close="showTokenModal = false"
+                />
+            </div>
+        </div>
+    </section>
+    {% if global_airdrops_end_date|date('Y-m-d H:i:s') > 'now'|date('Y-m-d H:i:s') %}
+    <section class="airdrop-section" id="airdrop-row">
+        <div class="container-fluid">
+            <div class="row pt-5 text-center">
+                <div class="col-12 justify-content-between">
+                    <span class="airdrop-heading">Get your <span>FREE IMP TOKENS</span> now!</span>
+                    <div class="row d-flex mb-5">
+                        <div class="col-12 col-xl-6 my-2 my-xl-4 pt-xl-4 text-sm-center text-xl-right pr-xl-5 order-2 order-xl-1">
+                            <a href="javascript:void(0)" onclick="viralsweep_lightbox_{{ global_viralsweep[0] }}.lightbox_on();">
+                            <button class="btn btn-primary btn-step mr-4 mb-3 mb-md-0 mb-xl-2 col-xl-6">
+                                <span>Claim</span>
+                            </button>
+                            </a>
+                        </div>
+                        <div class="col-12 col-xl-6 mt-4 mt-xl-0 my-4 text-xl-left pl-xl-5 order-1 order-xl-2">
+                            <span class="airdrop-gold-heading strong">25.000.000 IMP</span>
+                            <span class="airdrop-gold-heading">are being delivered.</span>
+                            <span class="airdrop-subtitle">hurry up and get yours</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <modal v-if="showSubmitAirdropsCode"
+                   @close="hideSubmitAirdropsCode"
+                   class="primary-modal" id="airdrop-modal" v-cloak>
+                <h2 slot="header" class="modal-title">SUBMIT YOUR CODE</h2>
+                <div slot="body">
+                    <form method="post" ref="airdropForm" action=" {{ path('airdrop') }} ">
+                        <div class="form-group">
+                            <label for="add_airdrop_code" class="text-dark">
+                                Submit the redeem code given in the first step
+                            </label>
+                            <div class="info col-12 text-center mb-2 {% if not hasAirdrops %} invisible {% endif %}">
+                                {{ airdropErrorMsg }}
+                            </div>
+                            <input type="text" id="add_airdrop_code" name="airdrop_code" v-model="airdropCode" required="required" minlength="16" maxlength="16" class="form-control form-control-md">
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-12 mb-2 mt-3 text-center">
+                                    <button type="submit" class="btn btn-primary mx-auto mt-1 ml-md-0 ml-lg-0 d-block d-md-inline d-lg-inline" @click="disableSubmit" {% if hasAirdrops %} disabled {% endif %}>
+                                        Submit
+                                    </button>
+                                    <button type="button" class="btn btn-primary mx-auto mt-1  ml-md-3 ml-lg-3 d-block d-md-inline d-lg-inline" @click="hideSubmitAirdropsCode">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </modal>
+        </div>
+    </section>
+    {% endif %}
+</div>
+<div id="app">
+    {% if isPolicyAccepted == false %}
+        <div v-if="modalShown" class="modal" id="myModal" tabindex="-1"  aria-labelledby="myModalLabel" aria-hidden="true" role="dialog">
+            <div class="modal-dialog modal-lg" style="max-width:1100px !important;">
+                <div class="modal-content" style="overflow: auto !important; max-height: 90vh !important;">
+                    <div class="modal-header">
+                        <h5 style="color: #1e72ff" class="modal-title"><b>RISK ACKNOWLEDGEMENT</b></h5>
+                    </div>
+                    <div class="modal-body">
+                        <hr>
+                        <ul>
+                            <li style="list-style: none;">Read the information below and click on “accept all and continue” to confirm that you have read the
+                                <a href={{ path('imp-token-policy') }} target="_blank"> Token Sales Policy</a>
+                                and the
+                                <a href={{ path('imp-token-terms-of-service') }} target="_blank">Terms of Service</a>
+                                and that you acknowledge having been warned of the following risks:
+                            </li>
+                        </ul>
+                        <ul>
+
+                            <li>I understand that cryptocurrencies including CoinIMP service and related technologies are new and untested and there
+                                can be temporary interruption or permanent termination of my access to the Website Services.</li>
+                            <br>
+
+                            <li>I confirm that I know the risk of loss in trading or holding cryptocurrencies and Tokens and I acknowledge the company’s
+                                advice to carefully consider whether trading or holding cryptocurrencies is suitable for me in light of my financial condition.</li>
+                            <br>
+
+                            <li>I am fully aware that an unfavorable regulatory environment could affect the functioning of this platform including but not limited
+                                to restrictions of use of cryptocurrencies in my jurisdiction.</li>
+                            <br>
+
+                            <li>My CoinIMP Account or the Platform performance can be attacked in any number of ways, including without limitation denial of service
+                                attacks, Sybil attacks, spoofing, smurfing, malware attacks, or consensus-based attacks.</li>
+                            <br>
+
+                            <li>I also understand that mineable decentralized cryptocurrencies are susceptible to mining attacks, including but not limited to
+                                double-spend attacks, majority mining power attacks, “selfish-mining” attacks, and race condition attacks.</li>
+                            <br>
+
+                            <li>I won’t make the Company responsible for any communication failures, disruptions, errors, distortions or delays I may experience
+                                when using the Website or any associated product or service.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-primary" @click="acceptBtn" :disabled="disabled">Accept all and continue</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" @click="cancelBtn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <input type="hidden" id="Accept-url"  ref ="acceptUrl" value="{{ path('accept-policy') }}">
+</div>
+<input type="hidden" id="parachute-url" value="{{ asset('build/images/parachute.svg') }}">
+{% endblock %}
+
+{% block pagescripts %}
+    <script>
+        var vs_lightbox_start_off = true;
+    </script>
+    <script async id="vsscript_{{ global_viralsweep[0] }}_{{ global_viralsweep[1] }}" type="text/javascript" src="https://app.viralsweep.com/vsa-lightbox-{{ global_viralsweep[2] }}-{{ global_viralsweep[0] }}.js?sid={{ global_viralsweep[0] }}_{{ global_viralsweep[1] }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('build/buy.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<div class="form-group row" id="icons">
+  <span class="mx-auto">
+    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
+        <button class="loginBtn loginBtn-google">
+            <font-awesome-icon :icon="['fab','google-plus-square']"></font-awesome-icon>
+            {% if page == 'signin' %}
+                Log in with Google
+             {% else %}
+                 sign up with Google
+            {% endif %}
+          </button>
+    </a>
+  </span>
+</div>
+<div class="form-group row">
+  <span class="mx-auto"><h3>OR</h3></span>
+</div>

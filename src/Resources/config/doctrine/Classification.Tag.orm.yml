@@ -1,0 +1,10 @@
+App\Entity\Classification\Tag:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: classification__tag
+
+    id:
+        id:
+           type: integer
+           generator:
+                strategy: AUTO

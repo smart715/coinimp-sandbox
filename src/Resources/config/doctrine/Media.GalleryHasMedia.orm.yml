@@ -1,0 +1,10 @@
+App\Entity\Media\GalleryHasMedia:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: media__gallery_media
+
+    id:
+        id:
+           type: integer
+           generator:
+                strategy: AUTO

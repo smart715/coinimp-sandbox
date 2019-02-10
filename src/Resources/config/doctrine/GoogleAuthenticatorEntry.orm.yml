@@ -1,0 +1,23 @@
+App\Entity\GoogleAuthenticatorEntry:
+    type: entity
+    table: "`google_authenticator_entry`"
+    repositoryClass: App\Repository\GoogleAuthenticatorEntryRepository
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        secret:
+            type: string
+            nullable: true
+        backupCodes:
+            type: json_array
+            nullable: true
+
+    oneToOne:
+        user:
+            targetEntity: User
+            inversedBy: googleAuthenticatorEntry

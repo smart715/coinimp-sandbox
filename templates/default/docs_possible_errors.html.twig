@@ -1,0 +1,60 @@
+{% extends 'default/documentation.html.twig' %}
+
+{% block contentSection %}
+
+    <div class="row">
+        <div class="col">
+            <h1 class="mb-4 title">Possible user errors in JS mining</h1>
+        </div>
+    </div>
+
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsivfont-size: 1.5rem;e-md">
+        <tr class="text-center">
+        <th class="w-50">Possible error</th>
+        <th>How to solve</th>
+        </tr>
+        <tr>
+            <td class="align-middle">
+            <p>Mining script <a href="{{ asset('build/images/script-not-load.jpg') }}" target="_blank" rel="nofollow">not loaded</a></p>
+            <p>even after correcting the script path for the AV Friendly Solution.</p>
+            <p>This can be noticed when the embedded script in your website is not running. So, you can follow your script location</p>
+            <p><code class="hljs">http://&lt;your-domain&gt;/&lt;path-to-script&gt;/Oc1X.php?f=alFM.js</code></p>
+            </td>
+            <td class="align-middle">It's advised to clear the user's server cache directory.</td>
+        </tr>
+        <tr>
+            <td class="align-middle">
+            <p>The local miner does not work after clicking on the "Start Mining" Button.</p>
+            <p>When you press F12 and check for the JS errors in the browser console, you get <a href="{{ asset('build/images/adblocker.jpg') }}"  target="_blank" rel="nofollow">this</a></p>
+            </td>
+            <td class="align-middle">The reason is that you have an Antivirus or AdBlocker installed on your machine. All you have to do is to deactivate them and then try running the miner again.</td>
+        </tr>
+        <tr>
+            <td class="align-middle">
+            <p>Network Connection <a href="{{ asset('build/images/firefox_error.jpg') }}" target="_blank" rel="nofollow">problem</a></p>
+            <p>It tends to happen when the network is too weak</p>
+            </td>
+            <td class="align-middle">Fix internet connection.</td>
+        </tr>
+        <tr>
+            <td class="align-middle">
+            <p>A client is reporting an error related to blobs and asking whether there's a way to have these blob URLs generated in random strings because he can't access nginx, is it possible?</p>
+            <p><a href="{{ asset('build/images/frmRecordRegion.png') }}" target="_blank" rel="nofollow">Screenshot of his error:</a></p>
+            </td>
+            <td class="align-middle">Wait till the miner gets fixed and check it with him again.</td>
+        </tr>
+        <tr>
+            <td class="align-middle">
+            <p><a href="{{ asset('build/images/Ucaught_error.jpg') }}" target="_blank" rel="nofollow">This error</a> appears when a client is trying to use the AV Friendly Solution. Such errors in console are due to the misconfiguration of the user's web server so that the script is detecting https enabled instead of http. And the miner does not run.</p>
+            </td>
+            <td class="align-middle">
+            <p>You can force http configuration by changing:</p>
+            <p><code class="hljs">$host = urlencode((isset($_SERVER['HTTPS']) ? 'https' : 'http') . "://" . $_SERVER['HTTP_HOST'] . "$uri");</code></p>
+            <p>To</p>
+            <p><code class="hljs">$host = urlencode('http://' . $_SERVER['HTTP_HOST'] . "$uri");</code></p>
+            <p>And lastly clear your server cache directory</p>
+            </td>
+        </tr>
+    </table>
+
+{% endblock %}

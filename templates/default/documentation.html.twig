@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block bodyClass %}
+{% spaceless %}
+    documentation-page
+{% endspaceless %}
+{% endblock %}
+
+{% block title %}
+{% spaceless %}
+    Documentation | CoinIMP
+{% endspaceless %}
+{% endblock %}
+
+{% block contentClass %}documentation d-flex flex-column{% endblock %}
+
+{% block content %}
+    <Slideout :toggle-selectors="['.toggle-sidebar']"
+              @on-translate="translate"
+              @on-beforeopen="beforeToggle('open')"
+              @on-beforeclose="beforeToggle('close')"
+              @on-open="toggle"
+              @on-close="toggle"
+              class="row m-0" grow id="documentation"
+    >
+        <div class="sidebar" id="menu"  @click="handleCloseOnClick">
+            <ul class="sections">
+                <li><a href="{{ path('documentation_root') }}" class="{{ app.request.attributes.get('_route') == 'documentation_root' ? 'active' : '' }}">Documentation</a></li>
+                <li><a href="{{ path('documentation', {'section': 'http-api'}) }}" class="{{ app.request.attributes.get('_route') == 'documentation' ? (app.request.attributes.get('_route_params')['section'] == 'http-api' ? 'active' : '') : '' }}">HTTP API</a>
+                    <ul class="sub-sections">
+                        <li><a href="{{ path('documentation', {'section': 'http-api'}) }}#hashes">hashes</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'http-api'}) }}#rewards">reward</a></li>
+                        <template v-if="versionValue > 1">
+                            <li><a href="{{ path('documentation', {'section': 'http-api'}) }}#user-balance">user/balance</a></li>
+                            <li><a href="{{ path('documentation', {'section': 'http-api'}) }}#user-list">user/list</a></li>
+                            <li><a href="{{ path('documentation', {'section': 'http-api'}) }}#user-withdraw">user/withdraw</a></li>
+                        </template>
+                    </ul>
+                </li>
+                <li><a href="{{ path('documentation', {'section': 'reference'}) }}" class="{{ app.request.attributes.get('_route') == 'documentation' ? (app.request.attributes.get('_route_params')['section'] == 'reference' ? 'active' : '') : '' }}">Reference</a>
+                    <ul class="sub-sections">
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#Client.Anonymous">Client.Anonymous</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#Client.User">Client.User</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#start">start()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#stop">stop()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#isRunning">isRunning()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#isMobile">isMobile()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#hasWASMSupport">hasWASMSupport()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#getAutoThreadsEnabled">getAutoThreadsEnabled()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#setAutoThreadsEnabled">setAutoThreadsEnabled()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#getHashesPerSecond">getHashesPerSecond()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#getNumThreads">getNumThreads()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#setNumThreads">setNumThreads()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#getThrottle">getThrottle()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#setThrottle">setThrottle()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#getTotalHashes">getTotalHashes()</a></li>
+                        <li><a href="{{ path('documentation', {'section': 'reference'}) }}#on">on()</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ path('documentation', {'section': 'possible-errors'}) }}" class="{{ app.request.attributes.get('_route') == 'documentation' ? (app.request.attributes.get('_route_params')['section'] == 'possible-errors' ? 'active' : '') : '' }}">Possible Errors</a></li>
+            </ul>
+        </div>
+        <div class="col content" id="panel">
+            <div class="toggle-sidebar" v-show="showToggleSidebarButton" v-cloak>
+                <font-awesome-layers class="fa-lg">
+                    <font-awesome-icon icon="bars"></font-awesome-icon>
+                </font-awesome-layers>
+            </div>
+            {% block contentSection %}
+                <h1 class="mb-4 title">Documentation of Monero JavaScript Mining</h1>
+                <p>To embed JavaScript miner just put code before &lt;/body&gt; tag of your HTML:</p>
+                <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="js hljs javascript"><span class="hljs-tag">&lt;script</span> <span class="hljs-attribute">src=</span><span class="hljs-string">"{{ global_miner_url }}/{{ scriptName.js }}.js"</span><span class="hljs-tag">&gt;&lt;/script&gt;</span>
+<span class="hljs-tag">&lt;script&gt;</span>
+    <span class="hljs-keyword">var</span> <span class="hljs-variable">miner</span> = <span class="hljs-keyword">new</span> <span class="hljs-variable">Client</span>.Anonymous(<span class="hljs-string">'&lt;site-key&gt;'</span>);
+    <span class="hljs-variable">miner</span>.start();
+<span class="hljs-tag">&lt;/script&gt;</span></code></pre>
+                <p>Where &lt;site-key&gt; is a hexadecimal, 64 characters-length key, generated by Coin<span class="imp-color">IMP</span> panel. You can find it in <a href="{{ path('dashboard') }}">Dashboard</a>.</p>
+                <p>Optionally you can add options for miner, for example set maximum CPU usage to 20%:</p>
+                <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="js hljs javascript"><span class="hljs-keyword">var</span> <span class="hljs-variable">miner</span> = <span class="hljs-keyword">new</span> <span class="hljs-variable">Client</span>.Anonymous(<span class="hljs-string">'&lt;site-key&gt;'</span>, { throttle: <span class="hljs-number">0.8</span>});
+<span class="hljs-variable">miner</span>.start();</code></pre>
+                <p>Also you can generate the code with site key ready to use - Easy way for beginners:</p>
+                <ol>
+                    <li>Go to <a href="{{ path('dashboard') }}">Dashboard</a>.</li>
+                    <li>Add a new site <img src="{{ asset('build/images/button-newsite.png') }}" width="100"></li>
+                    <li>Enter your site name and click save.</li>
+                    <li>In sites section click on Generate Code icon <font-awesome-icon icon="desktop" class="primary-color"></font-awesome-icon></li>
+                    <li>Copy the generated code and paste it just before &lt;/body&gt; tag in your website.</li>
+                </ol>
+            {% endblock %}
+        </div>
+    </Slideout>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{{ asset('build/documentation.js') }}"></script>
+{% endblock %}

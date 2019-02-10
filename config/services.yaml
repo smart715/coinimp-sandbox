@@ -1,0 +1,388 @@
+parameters:
+    locale: 'en'
+
+imports:
+    - { resource: parameters.yaml }
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
+    # makes classes in src available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../src/{Entity,Repository,*/Model}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    App\Controller\:
+        resource: '../src/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    App\Manager\InvestBalanceManager:
+        class: App\Manager\InvestBalanceManager
+        arguments:
+            $impPriceInUsd: '%imp_price_in_usd%'
+
+    App\Manager\DepositImpManager:
+        class: App\Manager\DepositImpManager
+        arguments:
+            $depositImpBonusPackages: '%deposit_imp_bonus_packages%'
+
+    App\Controller\WpPluginController:
+        arguments:
+            $twig: '@templating'
+
+    walletImp.transaction.manager:
+        class: App\Manager\WalletImpTransactionManager
+
+    walletImp.manager:
+        class: App\Manager\WalletImpManager
+
+    walletImp.transaction.handler:
+        class: App\WalletServices\WalletImpTransactionHandler
+        public: true
+        arguments: ['@doctrine.orm.entity_manager', '@walletImp.manager', '@walletImp.transaction.manager']
+
+    App\WalletServices\SystemWalletConfig:
+        class: App\WalletServices\SystemWalletConfig
+        arguments:
+            $isPresale: '%is_pre_sale%'
+            $totlaPresale: '%presale_wallet_amount%'
+            $totalTokensale: '%tokensale_wallet_amount%'
+            $tokensaleProfile: '%tokensale_wallet%'
+            $tokensaleCommissionPercentage: '%tokensale_commission_percentage%'
+            $depositImpMinAmount: '%deposit_imp_min_amount%'
+            $ormAdapter: '@orm_adapter.writable'
+
+    App\Communications\ActualCurrentTime: ~
+    App\Communications\CurrentTime:
+        class: App\Communications\ActualCurrentTime
+        public: true
+
+    App\Factory\HttpClientFactory: ~
+    App\Factory\HttpClientFactoryInterface: '@App\Factory\HttpClientFactory'
+
+    App\Communications\CurrencyConverterInterface: '@App\Communications\CachedCurrencyConverter'
+
+    App\Communications\ApiCurrencyConverter:
+        arguments:
+            $baseUri: '%currency_converter_url%'
+            $timeoutSeconds: '%currency_converter_response_timeout_seconds%'
+
+    App\Communications\CachedCurrencyConverter:
+        arguments:
+            $appCache: '@cache.app'
+            $currencyConverter: '@App\Communications\ApiCurrencyConverter'
+
+    App\Manager\TwoFactorManagerInterface: '@App\Manager\TwoFactorManager'
+
+    App\Manager\TwoFactorManager:
+        arguments:
+            $ormAdapter: '@orm_adapter.readonly'
+
+    App\Communications\MailSender\MailSender:
+        arguments:
+            $supportEmail: '%support_email%'
+            $mailerUser: '%mailer_user%'
+
+    App\Communications\MailSender\MailSenderInterface: '@App\Communications\MailSender\MailSender'
+
+    # Must be specified manually for each currency.
+    # Name has to be with the next pattern: 'network_data_source.{currency}d'
+    network_data_source.monerod:
+        class: App\DataSource\NetworkDataSource\MonerodNetworkDataSource
+
+    network_data_source.webchaind:
+        class: App\DataSource\NetworkDataSource\WebchaindNetworkDataSource
+    #########################################################################
+
+    App\DataSource\PoolSiteDataSource: ~
+    App\DataSource\CachedSiteDataSource:
+        arguments:
+            $innerSource: '@App\DataSource\PoolSiteDataSource'
+
+    App\DataSource\SiteDataSource: '@App\DataSource\CachedSiteDataSource'
+
+    App\DataSource\PoolFetcher\Communicator\Tunnel\NoTunnel:
+        public: true
+
+    App\DataSource\PoolFetcher\Communicator\Tunnel\SshTunnel:
+        arguments:
+            $tunnelHost: "@=parameter('pool_ssh_tunnel')['host']"
+            $tunnelPort: "@=parameter('pool_ssh_tunnel')['port']"
+        public: true
+
+    App\DataSource\PoolFetcher\Communicator\Communicator:
+        arguments:
+            $tunnel: >
+                @=service(parameter('pool_ssh_tunnel') ?
+                'App\\DataSource\\PoolFetcher\\Communicator\\Tunnel\\SshTunnel' :
+                'App\\DataSource\\PoolFetcher\\Communicator\\Tunnel\\NoTunnel')
+            $maxTimeout: '%pool_response_timeout_seconds%'
+
+    App\DataSource\PoolFetcher\Communicator\CommunicatorInterface: '@App\DataSource\PoolFetcher\Communicator\Communicator'
+
+    App\DataSource\PoolFetcher\Factory\FetcherFactory: ~
+
+    App\DataSource\PoolFetcher\Factory\FactoryInterface: '@App\DataSource\PoolFetcher\Factory\FetcherFactory'
+
+    App\DataSource\PoolFetcher\AggregatorPoolFetcher:
+        arguments:
+            $apiUrl: '%pool_aggregator_url%'
+
+    App\DataSource\PoolFetcher\PoolFetcherInterface: '@App\DataSource\PoolFetcher\AggregatorPoolFetcher'
+
+    App\Factory\CurlFactory: ~
+    App\Factory\CurlFactoryInterface: '@App\Factory\CurlFactory'
+
+    App\Crypto\Updater\CryptoUpdater:
+        arguments:
+            $ormAdapter: '@orm_adapter.writable'
+
+    App\Manager\CryptoManager:
+        arguments:
+            $ormAdapter: '@orm_adapter.writable'
+
+    App\Manager\ApiKeyManager:
+        arguments:
+            $ormAdapter: '@orm_adapter.writable'
+
+    App\Manager\SiteUserManager:
+            arguments:
+                $ormAdapter: '@orm_adapter.writable'
+
+    profile_manager:
+        class: App\Manager\ProfileManager
+        public: true
+        arguments:
+            $ormAdapter: '@orm_adapter.writable'
+
+    profile_manager_readonly:
+        class: App\Manager\ProfileManager
+        public: true
+        arguments:
+            $ormAdapter: '@orm_adapter.readonly'
+
+    App\Manager\ProfileManagerInterface: '@profile_manager'
+
+    App\SiteUpdater\SiteUpdaterInterface: '@App\SiteUpdater\OneByOneUpdater'
+
+    App\Manager\UserManager:
+        public: true
+        arguments:
+            $mailer: '@fos_user.mailer.default'
+            $logger: '@monolog.logger.user_action'
+
+    App\Fetcher\ProfileFetcher: ~
+    App\Fetcher\ProfileFetcherInterface: '@App\Fetcher\ProfileFetcher'
+
+    App\EventSubscriber\ConfirmationUserSubscriber:
+        arguments:
+            $ormAdapter: '@orm_adapter.writable'
+
+    orm_adapter.writable:
+        class: App\OrmAdapter\OrmAdapter
+        arguments:
+            $writeStrategy: '@App\OrmAdapter\WriteStrategy\DoWriteStrategy'
+
+    orm_adapter.readonly:
+        class: App\OrmAdapter\OrmAdapter
+        arguments:
+            $writeStrategy: '@App\OrmAdapter\WriteStrategy\NoWriteStrategy'
+
+    site_manager.normal:
+        class: App\Manager\SiteManager
+        public: true
+        arguments:
+            $siteUpdater: '@App\SiteUpdater\OneByOneUpdater'
+            $ormAdapter: '@orm_adapter.writable'
+
+    site_manager.normal_readonly:
+        class: App\Manager\SiteManager
+        public: true
+        arguments:
+            $siteUpdater: '@App\SiteUpdater\OneByOneUpdater'
+            $ormAdapter: '@orm_adapter.readonly'
+
+    App\Manager\SiteManagerInterface: '@site_manager.normal'
+
+    airdrop_manager:
+            class: App\Manager\AirdropManager
+            public: true
+            arguments:
+                $transactionHandler: '@walletImp.transaction.handler'
+                $ormAdapter: '@orm_adapter.writable'
+                $airdropsProfileEmail: '%airdrops_wallet%'
+                $airdropsValue: '%airdrops_value%'
+
+    App\Manager\AirdropManagerInterface: '@airdrop_manager'
+
+    GenPhrase\Password: ~
+
+    App\Payer\Communicator\RabbitmqConfig:
+        arguments:
+            $host: '%rabbitmq_host%'
+            $port: '%rabbitmq_port%'
+            $user: '%rabbitmq_user%'
+            $password: '%rabbitmq_password%'
+            $vhost: '%rabbitmq_vhost%'
+
+    App\Payer\Communicator\RabbitmqCommunicator: ~
+    App\Payer\Communicator\CommunicatorInterface: '@App\Payer\Communicator\RabbitmqCommunicator'
+
+    App\Payer\Payer: ~
+    App\Payer\PayerInterface: '@App\Payer\Payer'
+
+    App\EventListener\RegistrationInitializedListener:
+        tags:
+            - { name: kernel.event_listener, event: fos_user.registration.initialize }
+
+    App\EventListener\RegistrationCompletedListener:
+        tags:
+            - { name: kernel.event_listener, event: fos_user.registration.completed }
+
+    App\EventListener\SitemapRoutesListener:
+        arguments:
+            - "@router"
+        tags:
+            - { name: "kernel.event_listener", event: "presta_sitemap.populate" }
+
+    App\EventListener\RandomScriptNameListener:
+        tags:
+            - { name: "kernel.event_listener", event: "kernel.request" }
+
+    # Handle AccessDenied Exception before Symfony's ExceptionListener
+    # to throw 404 Not Found instead of 403 Access Denied or redirection to login
+    # Register with priority 2 because Symfony's ExceptionListener is registered with priority 1
+    App\EventListener\AdminExceptionListener:
+        tags:
+            - { name: "kernel.event_listener", event: "kernel.exception", priority: 2 }
+
+    App\Payer\PayoutCallbackHandler: ~
+    App\Payer\PayoutCallbackHandlerInterface: '@App\Payer\PayoutCallbackHandler'
+
+    App\EventListener\RequestLoggerListener:
+        arguments:
+            $requestMatcher: '@router.default'
+            $actionLogger: '@monolog.logger.user_action'
+        tags:
+            - { name: "kernel.event_listener", event: "kernel.request" }
+
+    App\EventListener\NoCacheListener:
+        tags:
+            - { name: "kernel.event_listener" , event: "kernel.response" }
+
+    App\EventListener\LogoutRequestLoggerListener:
+        arguments:
+            $actionLogger: '@monolog.logger.user_action'
+
+    App\EventListener\NotificationListener:
+        tags:
+          - { name: "kernel.event_listener", event: "kernel.request", method: "onKernelRequest" }
+
+
+    monolog.formatter.user_action:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "%%datetime%%|%%extra.ip_address%%|%%extra.username%%|%%context.request_type%%|%%message%%|%%context%%\n"
+            - "Y-m-d H:i:s"
+
+    monolog.formatter.admin_action:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "%%datetime%%|%%extra.ip_address%%|%%extra.username%%|%%extra.role%%|%%message%%|%%context%%\n"
+            - "Y-m-d H:i:s"
+
+    App\Logger\UserActionProcessor:
+        autowire: true
+        tags:
+            - { name: monolog.processor, channel: user_action }
+
+    App\Logger\AdminActionProcessor:
+        autowire: true
+        tags:
+            - { name: monolog.processor, channel: admin_action }
+
+    App\EventListener\FlashListener:
+        # Don't register this listener as a service,
+        # it works as compiler pass for FOSUserBundle FlashListener
+        autoconfigure: false
+        arguments:
+            $session: '@session'
+            $translator: '@translator'
+
+    # Register commands explicitly, auto-discovery is deprecated since Symfony 3.4
+    App\Command\:
+        resource: '../src/Command/*'
+        tags: ['console.command']
+
+    invest.json_rpc:
+        class: App\Communications\GuzzleWrapper
+        arguments:
+            $url: '%invest_url%'
+            $timeoutSeconds: '%invest_timeout_seconds%'
+
+    App\InvestGateway\InvestGatewayCommunicator:
+        arguments:
+            $jsonRpc: '@invest.json_rpc'
+            $investCurrencySymbols: '%invest_currency_symbols%'
+
+    # Fix Craue\ConfigBundle autowiring
+    # =======================================
+    Craue\ConfigBundle\Util\Config:
+        calls:
+            - method: setEntityManager
+              arguments:
+                  - '@doctrine.orm.default_entity_manager'
+            - method: setEntityName
+              arguments:
+                  - '%craue_config.entity_name%'
+
+    Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter: ~
+    Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface: '@Craue\ConfigBundle\CacheAdapter\SymfonyCacheComponentAdapter'
+    craue_config_default: '@Craue\ConfigBundle\Util\Config'
+    craue_config_cache_adapter: '@Craue\ConfigBundle\CacheAdapter\CacheAdapterInterface'
+    craue_config_cache_provider:
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+        public: false
+        arguments:
+          - 'craue_config'
+          - 0
+          - '%kernel.cache_dir%'
+
+    # SonataAdminBundle Registered Admin Classes
+    # =======================================
+    admin.user:
+        class: App\Admin\UserAdmin
+        arguments:
+            - null
+            - App\Entity\User
+            - App\Controller\UserAdminCRUDController
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: User }
+        public: true
+        calls:
+             - [init, ['@fos_user.user_manager', '@App\Manager\ProfileManagerInterface']]
+
+    # =======================================
+    # Social Login bundle
+    my.oauth_aware.user_provider.service:
+      class: App\Security\FOSUBUserProvider
+      arguments: ['@fos_user.user_manager', {google: googleID}]
+
+    # add more services, or override services that need manual wiring
+    # App\Service\ExampleService:
+    #     arguments:
+    #         $someArgument: 'some_value'

@@ -1,0 +1,26 @@
+App\Entity\Preserve:
+    type: entity
+
+    manyToOne:
+        profile:
+            targetEntity: Profile
+            inversedBy: preserves
+        crypto:
+            targetEntity: Crypto
+            cascade: [ 'persist' ]
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        reward:
+            type: bigint
+
+        hashes:
+            type: bigint
+
+        referralReward:
+            type: bigint

@@ -1,0 +1,366 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{% spaceless %}
+    Dashboard | CoinIMP
+{% endspaceless %}
+{% endblock %}
+{% block contentClass %}dashboard{% endblock %}
+
+{% block content %}
+    <div class="container py-2" id="dashboard">
+        <login-alert
+            v-if="showLoginAlert"
+            @click-login="handleLoginAlert"
+        >
+        </login-alert>
+        <div v-cloak>
+            <div v-if="showMoneroAlert" class="alert alert-warning" >
+                We have performance problems related to our panel. Your earnings are not affected in any way, but our page can work very slow. We are working on solution
+            </div>
+            <div v-if="showEmergencyAlert" class="alert alert-warning">
+                Failed to connect to the pool, retrying.
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col">
+                <span class="currency-title align-middle mr-3">Currency</span>
+                <div class="d-inline-block">
+                    <a href="{{ path('dashboard', {'crypto': 'xmr'}) }}" class="mr-2 btn {{ crypto == 'xmr' ? 'btn-dark' : 'btn-secondary' }}">Monero</a>
+                    <a href="{{ path('dashboard', {'crypto': 'web'}) }}" class="btn {{ crypto == 'web' ? 'btn-dark' : 'btn-secondary' }}">Webchain</a>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2 d-flex align-items-stretch">
+            <div class="col-12">
+                <span class="info">
+                    <font-awesome-layers class="fa-1x">
+                        <font-awesome-icon icon="info-circle"></font-awesome-icon>
+                    </font-awesome-layers>
+                    Hash rate below is <strong>average</strong> and it should reach max speed only after 48h since adding code to your websites.
+                </span>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card h-100">
+                    <div class="card-header-accent">
+                        Av. hashes/sec
+                    </div>
+                    <div class="card-body">
+                        <span class="card-title" id="total-hash-rate" v-cloak>
+                            <span class="v-cloak--inline loading-content"><i class="fas fa-circle-notch fa-spin"></i> Loading...</span>
+                            <span v-if="intervalErrors.pool"> - </span>
+                            <span v-else>{[ userStats.total.totalHashRate|numberFormat(0) ]}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card h-100">
+                    <div class="card-header-accent">
+                        Total hashes
+                    </div>
+                    <div class="card-body card-body-thash">
+                        <span class="card-title" id="total-hashes" v-cloak>
+                            <span class="v-cloak--inline loading-content"><i class="fas fa-circle-notch fa-spin"></i> Loading...</span>
+                            <span v-if="intervalErrors.pool"> - </span>
+                            <span v-else>{[ userStats.total.totalHashes|numberFormat(0) ]}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-4">
+                <div class="card h-100">
+                    <div class="card-header-accent">
+                        Pending balance
+                    </div>
+                    <div class="card-body">
+                        <span class="card-title" id="pending-balance" v-cloak>
+                            <span class="v-cloak--inline loading-content"><i class="fas fa-circle-notch fa-spin"></i> Loading...</span>
+                            <span>{[ userStats.total.pendingBalance|toXMR ]} <small class="text-muted">{{ crypto|upper }}</small></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-cloak>
+            {% spaceless %}
+            <div v-if="showPoolStats" class="row justify-content-center main-stats">
+                <div class="col-xs-12 col-md-auto text-center">
+                    <p>
+                        Payout:
+                        <span id="payout-per-million">{[ poolStats.payoutPerMillion|toXMR ]}</span>
+                        {[ crypto|upper ]} per 1M hashes<span class="d-none d-md-inline d-xl-none">,</span>
+                    </p>
+                </div>
+                <div class="col-auto d-none d-xl-block"><p>|</p></div>
+                <div class="col-xs-12 col-md-auto text-center">
+                    <p>
+                        Difficulty:
+                        <span id="difficulty">{[ (poolStats.difficulty / 1000 / 1000 / 1000)|numberFormat(3) ]}G</span>
+                        <span class="d-none d-md-inline d-xl-none">,</span>
+                    </p>
+                </div>
+                <div class="col-auto d-none d-xl-block"><p>|</p></div>
+                <div class="col-xs-12 col-md-auto text-center">
+                    <p>
+                        Orphan blocks:
+                        <span id="orphan-blocks">{[ poolStats.orphanBlocks|toFixed(2)|noZeroPadding ]}%</span>
+                        <span class="d-none d-md-inline d-xl-none">,</span>
+                    </p>
+                </div>
+                <div class="col-auto d-none d-xl-block"><p>|</p></div>
+                <div class="col-xs-12 col-md-auto text-center">
+                    <p>
+                        Block reward:
+                        <span id="block-reward">{[ poolStats.blockReward|toXMR|numberFormat(3) ]}</span>
+                        {[ crypto|upper ]}<span class="d-none d-md-inline d-xl-none">,</span>
+                    </p>
+                </div>
+                <div class="col-auto d-none d-xl-block"><p>|</p></div>
+                <div class="col-xs-12 col-md-auto text-center">
+                    <p>
+                        Payout:
+                        <span id="payout-percentage">{[ poolStats.payoutPercentage|toFixed(0) ]}%
+                            {% if(global_ads_option == "true") %}
+                            if advertisement is enabled , {[ poolStats.payoutWithoutAdsPercentage|toFixed(0) ]}% if advertisement is disabled
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            {% endspaceless %}
+        </div>
+        <div class="row">
+            <div class="col-12 text-right">
+                <button class="btn btn-primary my-1" type="button" @click="toggleCodeCalculator">
+                    Calculate your revenue
+                </button>
+                <button class="btn btn-primary my-1" id="default-code-btn" type="button" @click="toggleWordpressCard">Wordpress Plugin</button>
+                <button class="btn btn-primary my-1" id="default-code-btn" type="button" @click="toggleCodeCard">Get the code</button>
+            </div>
+        </div>
+        <div class="row mt-1 collapsible" :class="{ 'collapsed': !showCodeCalculator }" v-if="poolStats">
+            <div class="col-12">
+                <code-calculator
+                    :payout-per-million="poolStats.payoutPerMillion"
+                    :crypto="crypto"
+                    class="collapsible"
+                >
+                </code-calculator>
+            </div>
+        </div>
+        <div class="row mt-1 collapsible" :class="{ 'collapsed': !showCodeCard }">
+            <div class="col-12">
+                <code-card
+                    site-key="{{ defaultSite.key }}"
+                    scripts-url="{{ global_scripts_url }}"
+                    miner-url="{{ global_miner_url }}"
+                    php-script="{{ scriptName.php }}"
+                    js-script="{{ scriptName.js }}"
+                    :ads-option="{{ global_ads_option == "true" ? "true" : "false" }}"
+                    crypto="{{ crypto }}"
+                >
+                </code-card>
+            </div>
+        </div>
+        <div class="row mt-1 collapsible" :class="{ 'collapsed': !showWordpressCard }">
+            <div class="col-12">
+                <wordpress-card></wordpress-card>
+            </div>
+        </div>
+        <miner
+            :pool-error="poolError"
+            miner-url="{{ global_miner_url }}/{{ random_string(4) }}.js"
+            miner-key="{{ localMinerSite.siteKey }}"
+            :last-total-hashes="{{ localMinerSite.hashesTotal }}"
+            :new-total-hashes="localMinerTotalHashes"
+            crypto="{{ crypto }}">
+            <slot slot="card-header" class="card">
+                <div class="card-header">
+                    Local Miner <span>- Try it out by mining yourself!</span>
+                </div>
+                <div v-if="false" class="card-body">loading...</div>
+            </slot>
+        </miner>
+        <div class="row mt-4 mb-2" id="sites-section">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Sites <span>- Use it if you want per site statistics!</span>
+                    </div>
+                    <div v-if="false" class="card-body">loading...</div>
+                    <div class="card-body card-body-table">
+                        <site-table
+                            :pool-error="poolError"
+                            :visible-sites="visibleSites"
+                            @edit-site="editSite"
+                            @delete-site="deleteSite"
+                            @sort="sortSiteBy"
+                            scripts-url="{{ global_scripts_url }}"
+                            miner-url="{{ global_miner_url }}"
+                            php-script="{{ scriptName.php }}"
+                            js-script="{{ scriptName.js }}"
+                            :ads-option="{{ global_ads_option == "true" ? "true" : "false" }}"
+                            crypto="{{ crypto }}"
+			    >
+		        </site-table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-right mt-2">
+                <button class="btn btn-primary" id="add-site-btn" @click="loadAddSiteModal">Add new site</button>
+            </div>
+            <form-modal
+                v-if="showAddSiteModal"
+                ref="formAddSite"
+                @success-submit="handleFormSubmit"
+                @error="handleFormModalError"
+		        @button-clicked="handleFormButton"
+                @close="showAddSiteModal = false">
+            </form-modal>
+        </div>
+
+        <div class="row mt-4 mb-2" id="site-users-section">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Users
+                    </div>
+                    <div class="card-body card-body-table">
+                        <site-user-table :users="visibleUsers" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-2" id="api-keys-section">
+            <div class="col-12">
+                <span class="info">
+                    <font-awesome-layers class="fa-1x">
+                        <font-awesome-icon icon="info-circle"></font-awesome-icon>
+                    </font-awesome-layers>
+                    Action <strong>Revoke</strong> will regenerate your API keys
+                </span>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header" id="api-keys-section">
+                        API Keys
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col-12 text-center">
+                                <div v-if="isApiKeyExists">
+                                    <p>Public: <span v-text="apiKeys.public"></span></p>
+                                </div>
+                                <div v-else>
+                                    <p>Generate your unique API keys to get access to our commands from your application.</p>
+                                    <p class="text-danger">You can see private key only once</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-cloak class="col-12 text-right mt-2">
+                <div v-if="isApiKeyExists">
+                    <button class="btn btn-primary" id="api-revoke-btn" @click="openConfirmModal(openApiKeysModal)">Revoke</button>
+                </div>
+                <div v-else>
+                    <button class="btn btn-primary" id="api-revoke-btn" @click="openApiKeysModal">Generate</button>
+                </div>
+            </div>
+            <api-keys-modal
+                v-if="showApiKeysModal"
+                @close="closeApiKeysModal"
+                :load-status="apiKeysLoaded"
+                :api-keys="apiKeys">
+            </api-keys-modal>
+        </div>
+        <div class="row mt-4 mb-2">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" id="referral-section">
+                        Referral Program <span>- Invite and earn!</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col-12 text-center">
+                                <p>Share this registration link with your friends:</p>
+                            </div>
+                            {% set referralLinkRelative =path('register_referral', { referralCode: referralCode }) %}
+                            {% set referralLink = absolute_url(referralLinkRelative) %}
+                            {% set referralLinkFacebook = (global_blogspotUrl|trim('/')) ~ referralLinkRelative %}
+                            <div class="col-12 mb-1 text-center" id="referral-link-text">
+                                <pre><code class="html hljs">{{ referralLink }}</code></pre>
+                            </div>
+
+                            {{ include('default/share_buttons.html.twig', { 'url': referralLink }) }}
+
+                            <div class="col-xs-12 col-md-5 order-3 order-md-1 mb-2 text-center text-md-left">
+                                <span class="stats-mini-block">Total earned:
+                                    <span id="referral-reward" v-cloak>
+                                        <span class="v-cloak--inline loading-content"><i class="fas fa-circle-notch fa-spin"></i> Loading...</span>
+                                        <span>{[ userStats.referralReward|toXMR ]}</span>
+                                    </span>
+                                    <small> {{ crypto|upper }}</small>
+                                </span>
+                            </div>
+                            <div class="col-xs-12 col-md-3 order-2 order-md-2 mb-2 text-center text-md-left">
+                                <span class="stats-mini-block">Referrals:
+                                    <span id="referrals-count" v-cloak>
+                                        <span class="v-cloak--inline loading-content"><i class="fas fa-circle-notch fa-spin"></i> Loading...</span>
+                                        <span>{[ userStats.referralsCount ]}</span>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col-xs-12 col-md-4 order-1 order-md-3 mb-2 text-center text-md-right">
+                                <copy-button
+                                    class="no-white-space"
+                                    data-clipboard-text="{{ absolute_url(path('register_referral', { referralCode: referralCode })) }}">
+                                </copy-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <confirm-modal
+            v-cloak
+            v-if="showConfirmModal"
+            @close="showConfirmModal = false"
+            @confirm="confirmModalAction">
+
+            <p class="mx-3"
+            v-if="confirmModalAction === openApiKeysModal">
+                Your previous API keys will be revoked and all software that was using it will stop working, please use new keys from now on.
+            </p>
+
+            <span slot="confirm">Ok</span>
+
+        </confirm-modal>
+
+        <input type="hidden" id="initial-total-hash-rate" value="{{ userStats.totalHashRate }}">
+        <input type="hidden" id="initial-total-hashes" value="{{ userStats.totalHashes }}">
+        <input type="hidden" id="initial-pending-balance" value="{{ userStats.pendingBalance }}">
+        <input type="hidden" id="initial-referral-reward" value="{{ referralReward }}">
+        <input type="hidden" id="initial-referrals-count" value="{{ referralsCount }}">
+        <input type="hidden" id="initial-api-key-public" value="{{ apiKey is not null ? apiKey.getPublicKey : '' }}">
+        <input type="hidden" id="crypto" value="{{ crypto }}">
+
+        <input type="hidden" id="minimal-payout" value="{{ minimalPayout }}">
+        <input type="hidden" id="stats-refresh-rate" value="{{ global_statsRefreshRate }}">
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('build/dashboard.js') }}"></script>
+{% endblock %}

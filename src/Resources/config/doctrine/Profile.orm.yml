@@ -1,0 +1,67 @@
+App\Entity\Profile:
+    type: entity
+    repositoryClass: App\Repository\ProfileRepository
+
+    oneToMany:
+        sites:
+            orphanRemoval: true
+            targetEntity: Site
+            mappedBy: profile
+            cascade: [ 'persist', 'remove' ]
+        payments:
+            targetEntity: Payment
+            mappedBy: profile
+            cascade: [ 'persist', 'remove' ]
+        referencedProfiles:
+            targetEntity: Profile
+            mappedBy: referencer
+        referencedIcoProfiles:
+            targetEntity: Profile
+            mappedBy: referencerIco
+        preserves:
+            targetEntity: Preserve
+            mappedBy: profile
+            cascade: [ 'persist', 'remove' ]
+        wallets:
+            targetEntity: App\Entity\Wallet
+            mappedBy: profile
+            cascade: [ 'persist', 'remove' ]
+
+    manyToOne:
+        referencer:
+            targetEntity: Profile
+            inversedBy: referencedProfiles
+            joinColumn:
+                name: referencer_id
+                referencedColumnName: id
+                onDelete: 'SET NULL'
+
+        referencerIco:
+            targetEntity: Profile
+            inversedBy: referencedIcoProfiles
+            joinColumn:
+                name: referencer_ico_id
+                referencedColumnName: id
+                onDelete: 'SET NULL'
+
+    oneToOne:
+        user:
+            orphanRemoval: true
+            targetEntity: User
+        walletImp:
+            targetEntity: App\Entity\WalletImp\WalletImp
+            cascade: [ 'persist' ]
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        referralCode: ~
+        policyAccepted:
+            type: boolean
+            nullable: true
+            options:
+                default: false

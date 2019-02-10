@@ -1,0 +1,375 @@
+PrestaSitemapBundle:
+    resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
+    prefix: /
+
+admin:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+
+google_login:
+    path: /login/check-google
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+error500:
+    path: /error500
+    controller: App\Controller\DefaultController::error500Action
+
+homepage:
+    path: /
+    controller: App\Controller\DefaultController::indexAction
+    options:
+        sitemap: true
+
+home:
+    path: /home
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: homepage
+        permanent: true
+        keepRequestMethod: true
+
+login:
+    path: /login
+    controller: App\Controller\SecurityController::loginAction
+
+referral:
+    path: /referral
+    controller: App\Controller\DefaultController::referralAction
+    options:
+        sitemap: true
+
+register_referral:
+    path: /invite/{referralCode}
+    requirements:
+        referralCode: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
+    controller: App\Controller\DefaultController::registerReferralAction
+
+register_ico_referral:
+    path: /tokensale_invite/{referralCode}
+    requirements:
+        referralCode: '^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$'
+    controller: App\Controller\DefaultController:registerIcoReferralAction
+
+dashboard:
+    path: /dashboard/{crypto}
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\DefaultController::dashboardAction
+
+buy:
+    path: /buy
+    controller: App\Controller\DefaultController:buyAction
+
+airdrop:
+    path: /airdrop
+    controller: App\Controller\DefaultController:addAirdropAction
+
+token_sale:
+    path: /tokensale
+    controller: App\Controller\DefaultController::tokenSaleAction
+
+documentation_root:
+    path: /documentation
+    controller: App\Controller\DefaultController::documentationRootAction
+    options:
+        sitemap: true
+
+documentation:
+    path: /documentation/{section}
+    requirements:
+        section: reference|http-api|possible-errors
+    controller: App\Controller\DefaultController::documentationAction
+    options:
+        expose: true
+
+contact:
+    path: /contact
+    controller: App\Controller\DefaultController::contactAction
+    options:
+        sitemap: true
+
+about:
+    path: /about
+    controller: App\Controller\DefaultController::aboutAction
+    options:
+        sitemap: true
+
+faq:
+    path: /faq
+    controller: App\Controller\DefaultController::faqAction
+    options:
+        sitemap: true
+
+terms-and-conditions:
+    path: /terms-and-conditions
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    options:
+        sitemap: true
+    defaults:
+        template: default/terms.html.twig
+
+privacy-policy:
+    path: /privacy-policy
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    options:
+        sitemap: true
+    defaults:
+        template: default/privacy_policy.html.twig
+
+white_paper:
+    path: /coinimp-white-paper
+    controller: App\Controller\DefaultController:whitePaperAction
+    options:
+        sitemap: true
+
+imp-token-policy:
+    path: /imp-token-policy
+    controller: App\Controller\DefaultController:impTokenPolicyAction
+    options:
+        sitemap: true
+
+imp-token-terms-of-service:
+    path: /imp-token-terms-of-service
+    controller: App\Controller\DefaultController:impTokenTermsOfServiceAction
+    options:
+        sitemap: true
+
+site_add:
+    path: /dashboard/{crypto}/add-site/
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\DefaultController::addSiteAction
+    options:
+        expose: true
+
+site_delete:
+    path: /dashboard/delete-site/{siteWords}
+    controller: App\Controller\DefaultController::deleteSiteAction
+    options:
+        expose: true
+
+wallet:
+    path: /wallet/{crypto}
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\DefaultController::walletAddressAction
+
+profile:
+    path: /profile
+    controller: App\Controller\DefaultController::profileSettingsAction
+
+site_edit:
+    path: /dashboard/edit-site/{siteWords}
+    controller: App\Controller\DefaultController::editSiteAction
+    options:
+        expose: true
+
+payout:
+    path: /wallet/pay/{crypto}
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\DefaultController::payAction
+
+accept-policy:
+    path: /accept-policy
+    controller: App\Controller\ApiController:acceptPolicyAction
+
+api_profile_get_stats:
+    path: /api/profile/get-stats/{crypto}
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\ApiController::getStatsAction
+    options:
+        expose: true
+
+api_get_pool_stats:
+    path: /api/get-pool-stats/{crypto}
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\ApiController::getPoolStatsAction
+    options:
+        expose: true
+
+api_get_session_status:
+    path: /api/get-session-status
+    controller: App\Controller\ApiController::getSessionStatusAction
+    options:
+        expose: true
+
+api_get_api_keys:
+    path: /api/get-api-keys
+    controller: App\Controller\ApiController::revokeKeysAction
+    options:
+        expose: true
+
+api_get_pending_reward:
+    path: /api/get-pending-reward/{crypto}
+    defaults:
+        crypto: xmr
+    requirements:
+        crypto: xmr|web
+    controller: App\Controller\ApiController::getPendingRewardAction
+    options:
+        expose: true
+
+api_get_usd_rate:
+    path: /api/get_usd_rate/{currency}
+    controller: App\Controller\ApiController::getUsdRateAction
+    options:
+        expose: true
+
+api_get_sold_imp:
+    path: /api/sold-imp
+    controller: App\Controller\ApiController::getSoldImp
+
+api_get_registered_users_count:
+    path: /api/get-registered-users-count
+    controller: App\Controller\ApiController::getRegisteredUsersCountAction
+    options:
+        expose: true
+
+api_token:
+    path: /api/token
+    controller: App\Controller\ApiController:token
+    options:
+        expose: true
+
+api_get_total_coins:
+    path: /api/api-get-total-coins
+    controller: App\Controller\ApiController:getTotalCoinsAction
+    options:
+        expose: true
+
+user_api_get_hashes:
+    path: /api/v1/hashes
+    methods: [GET]
+    controller: App\Controller\Api\UserApiV1Controller::hashesAction
+
+user_api_get_reward:
+    path: /api/v1/reward
+    methods: [GET]
+    controller: App\Controller\Api\UserApiV1Controller::rewardAction
+
+user_api2_get_hashes:
+    path: /api/v2/hashes
+    methods: [GET]
+    controller: App\Controller\Api\UserApiV2Controller::hashesAction
+
+user_api2_get_reward:
+    path: /api/v2/reward
+    methods: [GET]
+    controller: App\Controller\Api\UserApiV2Controller::rewardAction
+
+user_api2_get_site_user_balance:
+    path: /api/v2/user/balance
+    methods: [GET]
+    controller: App\Controller\Api\UserApiV2Controller:getSiteUserBalanceAction
+
+user_api2_get_site_users_list:
+    path: /api/v2/user/list
+    methods: [GET]
+    controller: App\Controller\Api\UserApiV2Controller:getSiteUserListAction
+
+user_api2_site_user_withdraw:
+    path: /api/v2/user/withdraw
+    methods: [POST]
+    controller: App\Controller\Api\UserApiV2Controller:withdrawUserAction
+
+fos_user_registration:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+    options:
+        expose: true
+
+login_check:
+    path: /login_check
+    methods: [GET]
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /login
+        permanent: false
+        keepRequestMethod: true
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    options:
+        expose: true
+
+password_resetting_request:
+    path: /resetting/request
+    controller: App\Controller\DefaultController::requestResetAction
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+    options:
+        expose: true
+
+media:
+    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+    prefix: /media
+
+news_post_trailing_slash:
+    path: /news/{title}/
+    controller: App\Controller\RedirectingController::removeTrailingSlash
+
+news:
+    resource: '@SonataNewsBundle/Resources/config/routing/news.xml'
+    prefix: /news
+    trailing_slash_on_root: false
+
+2fa_login:
+    path: /2fa
+    controller: "scheb_two_factor.form_controller::form"
+
+2fa_login_check:
+    path: /2fa_check
+
+two_factor_auth:
+    path: /profile/2fa
+    controller: App\Controller\DefaultController::twoFactorAuthAction
+
+wp_downloadplugin:
+    path: /downloadwpplugin
+    controller: App\Controller\WpPluginController:downloadAction
+    options:
+        expose: true
+
+wp_resources_minerscripturl:
+    path: /wppluginfile/defscript
+    controller: App\Controller\WpPluginController:minerScriptsURLAction
+
+wp_resources_avfriendlyurl:
+    path: /wppluginfile/avfriendly
+    controller: App\Controller\WpPluginController:avFriendlyURLAction

@@ -1,0 +1,10 @@
+App\Entity\Classification\Context:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: classification__context
+
+    id:
+        id:
+           type: string
+           generator:
+                strategy: NONE

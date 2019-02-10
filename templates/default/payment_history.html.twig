@@ -1,0 +1,76 @@
+<div class="row mt-4 mb-2" id="payment-history">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header justify-content-between">
+                Payment History
+            </div>
+            <div class="card-body card-body-table table-responsive-xl text-center">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Fee</th>
+                        <th>Status</th>
+                        <th>Transaction Hash</th>
+                        {% if crypto == 'xmr' %}
+                        <th>Payment ID</th>
+                        {% endif %}
+                        <th>Wallet Address</th>
+                        <th>Currency</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if payments is empty %}
+                        <tr>
+                            <td class="text-center" colspan="8"><em>No payouts were issued yet</em></td>
+                        </tr>
+                    {% endif %}
+                    {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.date|date('d.m.Y H:i:s') }}</td>
+                            <td>{{ payment.amount|toXMR }}</td>
+                            <td>{{ payment.fee|toXMR }}</td>
+                            <td>{{ payment.status|capitalize }}</td>
+                            {% if payment.id matches '/^(0x)?([A-Fa-f0-9]{64})$/' %}
+                                <td>
+                                    <div class="preview-field" tabindex="0" data-simplebar>
+                                        <span><a href="{{ payment.explorerUrl }}/{{ payment.id }}" rel="nofollow" target="_blank">{{ payment.id }}</a></span>
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td class="text-center">
+                                    -
+                                </td>
+                            {% endif %}
+                            {% if payment.paymentId|length > 0 %}
+                                <td>
+                                    <div class="preview-field" tabindex="0" data-simplebar>
+                                        <span>{{ payment.paymentId }}</span>
+                                    </div>
+                                </td>
+                            {% elseif crypto == 'xmr' %}
+                                <td class="text-center">
+                                    -
+                                </td>
+                            {% endif %}
+                            <td>
+                                <div class="preview-field" tabindex="0" data-simplebar>
+                                    <span>{{ payment.wallet }}</span>
+                                </div>
+                            </td>
+                            <td>{{ payment.crypto|upper }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mt-2">
+        <div class="stats-mini-block">
+            Total paid: {{ totalPaidRewardAmount|toXMR }} <small>{{ crypto|upper }}</small>
+            {% if totalPendingPaidRewardAmount > 0 %} + <small>{{ totalPendingPaidRewardAmount|toXMR }} {{ crypto|upper }}</small> pending{% endif %}
+        </div>
+    </div>
+</div>

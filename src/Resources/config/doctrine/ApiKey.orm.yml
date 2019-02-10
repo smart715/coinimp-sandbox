@@ -1,0 +1,20 @@
+App\Entity\ApiKey:
+    type: entity
+    repositoryClass: App\Repository\ApiKeyRepository
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: auto
+
+    fields:
+        publicKey:
+            type: string
+        privateKey:
+            type: string
+
+    oneToOne:
+        user:
+            targetEntity: User
+            inversedBy: key

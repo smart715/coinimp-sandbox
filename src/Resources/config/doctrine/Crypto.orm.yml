@@ -1,0 +1,17 @@
+App\Entity\Crypto:
+    type: entity
+    repositoryClass: App\Repository\CryptoRepository
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        symbol:
+            type: string
+        minimalPayout:
+            type: float
+        fee:
+            type: float

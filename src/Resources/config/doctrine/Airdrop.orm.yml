@@ -1,0 +1,18 @@
+App\Entity\Airdrop:
+    type:  entity
+    repositoryClass: App\Repository\AirdropRepository
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        code: ~
+        isActive:
+            type: boolean
+
+    oneToOne:
+        profile:
+            targetEntity: Profile

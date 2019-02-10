@@ -1,0 +1,34 @@
+App\Entity\WalletImp\WalletImp:
+    type:  entity
+    repositoryClass: App\Repository\WalletImpRepository
+    table: "wallet_imp"
+
+    id:
+        id:
+            type: integer
+            generator:
+              strategy: AUTO
+
+    oneToMany:
+        transactions:
+            targetEntity: WalletImpTransaction
+            mappedBy: wallet
+            cascade: [ 'persist', 'remove' ]
+            orphanRemoval: true
+            OrderBy:
+              createdAt: DESC
+
+
+    fields:
+        totalAmount:
+            type: bigint
+        freezeAmount:
+            type: integer
+        actualPaid:
+            type: bigint
+        created:
+            type: datetime
+            columnDefinition: DATETIME default CURRENT_TIMESTAMP
+        updated:
+            type: datetime
+            columnDefinition: DATETIME on update CURRENT_TIMESTAMP

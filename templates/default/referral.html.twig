@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block contentClass %}referral d-flex flex-column{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-6 d-flex flex-column justify-content-center">
+                <span class="title">When you refer someone</span>
+                <span class="title"><span class="title-lead">you will get {{ global_referralPercentage }}%</span> of all his earnings!</span>
+                <span class="subtitle">How to get started? It's very easy!</span>
+                <p>Go to your dashboard, scroll down to Referral Program and you will be able to generate a unique link to our website. If a user registers via this link, <strong>you will get {{ global_referralPercentage }}% of his earnings.</strong></p>
+                <p>{{ 'this.percent.goes'|transchoice(global_referralPercentage) }} from our pocket, so neither you nor the referred person lose anything!</p>
+                <a href="{{ path('dashboard') }}{% if app.user %}#referral-section"{% endif %}" class="btn btn-primary align-self-start">Earn more with CoinImp!</a>
+            </div>
+            <div class="col-lg-6 d-none d-lg-flex align-items-center">
+                <img src="{{ asset('build/images/imp-calculator.png') }}" class="img-fluid">
+            </div>
+        </div>
+    </div>
+{% endblock %}

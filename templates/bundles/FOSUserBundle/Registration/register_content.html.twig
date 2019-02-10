@@ -1,0 +1,15 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends 'form.html.twig' %}
+
+{% set formHeader = "Sign Up" %}
+{% block formBody %}
+    {% include '@FOSUser/social_login.html.twig' with {'page': 'signup'} %}
+    {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+    {{ form_row(form.email, {'attr': {'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$'}}) }}
+    {{ form_widget(form) }}
+    <div class="form-group text-center">
+        <input type="submit" class="btn btn-primary" value="Register"> or <a href="{{ path('fos_user_security_login') }}">Log In</a>
+    </div>
+    {{ form_end(form) }}
+    <p class="text-center">By clicking Register, you accept <br><a target="_blank" href="{{ path('terms-and-conditions') }}">Terms & Conditions</a> and <a target="_blank" href="{{ path('privacy-policy') }}">Privacy policy</a></p>
+{% endblock %}

@@ -1,0 +1,32 @@
+monolog:
+    channels: ['user_action', 'admin_action']
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: info
+            handler: nested
+            channels: ['!php', '!user_action', '!admin_action']
+        nested:
+            type: stream
+            level: info
+            path: '%log_path%/%kernel.environment%.log'
+        phpLog:
+            type: stream
+            level: NOTICE
+            path: '%log_path%/%kernel.environment%.log'
+            channels: [php]
+        user_action:
+            type: stream
+            level: info
+            path: '%log_path%/actions.log'
+            channels: ['user_action']
+            formatter: monolog.formatter.user_action
+        admin_action:
+            type: stream
+            level: info
+            path: '%log_path%/admin_action.log'
+            channels: ['admin_action']
+            formatter: monolog.formatter.admin_action
+        console:
+            type: console
+            process_psr_3_messages: false

@@ -1,0 +1,9 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block contentClass %}wrap-main-form {% endblock %}
+
+{% block fos_user_content %}
+    <div class="py-4">
+        {{ include("@FOSUser/Registration/register_content.html.twig") }}
+    </div>
+{% endblock fos_user_content %}

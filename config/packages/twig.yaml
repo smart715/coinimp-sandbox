@@ -1,0 +1,29 @@
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes:
+        - "@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig"
+        - 'form/fields.html.twig'
+        - '@SonataFormatter/Form/formatter.html.twig'
+
+    globals:
+        global_referralPercentage: '%referral_percentage%'
+        global_statsRefreshRate: '%stats_refresh_rate_seconds%'
+        global_version: 'v1.3.3'
+        global_miner_url: '%miner_url%'
+        global_scripts_url: '%scripts_url%'
+        global_blogspotUrl: '%blogspot_url%'
+        global_default_post_author: 'CoinImp'
+        global_usersCountRefreshRate: '%users_count_refresh_rate_seconds%'
+        global_totalEmbeddedScriptViews: '%total_embedded_script_views%'
+        global_youtubeVideoId: '%youtube_video_id%'
+        global_isPreSale: '%is_pre_sale%'
+        global_support_email: '%support_email%'
+        global_imp_price_in_usd: '%imp_price_in_usd%'
+        global_token_sale_date: '%token_sale_date%'
+        global_airdrops_end_date: '%airdrops_end_date%'
+        global_deposit_imp_bonus_packages: '%deposit_imp_bonus_packages%'
+        global_exchange_url: '%exchange_url%'
+        global_exchange_name: '%exchange_name%'
+        global_viralsweep: '%viralsweep%'
+        global_ads_option: '%ads_option%'

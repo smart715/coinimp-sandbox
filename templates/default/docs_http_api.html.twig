@@ -1,0 +1,194 @@
+{% extends 'default/documentation.html.twig' %}
+
+{% block contentSection %}
+
+    <div class="row">
+        <div class="col">
+            <h1 class="mb-4 title">HTTP API instructions</h1>
+        </div>
+        <div class="col-auto">
+            <select class="custom-select" v-model="version">
+                <option value="1" selected>v1.0</option>
+                <option value="2">v2.0</option>
+            </select>
+        </div>
+    </div>
+
+    <div v-if="versionValue === 1" v-cloak>
+        <p>All requests must be provided with unique API keys, which you can generate in dashboard. You have to pass API keys with each request as <code>public</code> and <code>private</code> parameters. For example:</p>
+        <p><pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="mt-3"><code class="js hljs javascript hljs-fix"><span class="hljs-tag">{{ url('user_api_get_hashes') }}?
+        public=7e26bb94aa2ce44e6e16aca6ae6d28c7f0157b5ccd7a82f86bbbe8d835effd71&
+        private=5112486af64b2f97bd3742c4153cee32452549491480cfd164b336720b82a84d</span></code></pre></p>
+    </div>
+    <div v-if="versionValue === 2">
+        <p>
+            All requests must be provided with unique API keys, which you can generate in dashboard.
+            You have to pass API keys with each request in headers as <code>X-API-ID</code> (public) and <code>X-API-KEY</code> (private) parameters. For example:
+        </p>
+        <p><pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="mt-3"><code class="js hljs javascript hljs-fix"><span class="hljs-tag">curl -L {{ url('user_api2_get_hashes') }}
+        -H 'X-API-ID:7e26bb94aa2ce44e6e16aca6ae6d28c7f0157b5ccd7a82f86bbbe8d835effd71'
+        -H 'X-API-KEY:5112486af64b2f97bd3742c4153cee32452549491480cfd164b336720b82a84d'</span></code></pre></p>
+    </div>
+
+    <p>Response format is JSON</p>
+
+    <!-- HASHES -->
+    <h2 class="mb-3 subtitle" id="hashes"><a href="#hashes"><font-awesome-icon icon="link"></font-awesome-icon></a>hashes</h2>
+
+    <template v-if="versionValue > 1">
+        <p>Method: <span class="badge badge-success w-auto">GET</span></p>
+    </template>
+    <p>Get total hashes count of your account or single site</p>
+    <p>Request:</p>
+
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+        <tr>
+            <td>site-key (optional)</td>
+            <td>Your site key, that you can find in dashboard by clicking on <code>Generate</code> button</td>
+        </tr>
+        <tr>
+            <td>currency (optional)</td>
+            <td>Choose the currency that you want to check. By default <code>{{ defaultCrypto|upper }}</code> will be used</td>
+        </tr>
+    </table>
+
+    <p>Response:</p>
+
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+        <tr>
+            <td>message</td>
+            <td>data || fail message</td>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>success || failure</td>
+        </tr>
+    </table>
+    <!-- REWARD -->
+    <h2 class="mb-3 subtitle" id="rewards"><a href="#rewards"><font-awesome-icon icon="link"></font-awesome-icon></a>reward</h2>
+
+    <template v-if="versionValue > 1">
+        <p>Method: <span class="badge badge-success w-auto">GET</span></p>
+    </template>
+    <p>Get total reward count of your account or single site</p>
+    <p>Request:</p>
+
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+        <tr>
+            <td>site-key (optional)</td>
+            <td>Your site key, that you can find in dashboard by clicking on <code>Generate</code> button</td>
+        </tr>
+        <tr>
+            <td>currency (optional)</td>
+            <td>Choose the currency that you want to check. By default <code>{{ defaultCrypto|upper }}</code> will be used</td>
+        </tr>
+    </table>
+
+    <p>Response:</p>
+
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+        <tr>
+            <td>message</td>
+            <td>data || fail message</td>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>success || failure</td>
+        </tr>
+    </table>
+
+    <template v-if="versionValue > 1">
+        <!-- USER BALANCE -->
+        <h2 class="mb-3 subtitle" id="user-balance"><a href="#user-balance"><font-awesome-icon icon="link"></font-awesome-icon></a>user/balance</h2>
+
+        <p>Method: <span class="badge badge-success w-auto">GET</span></p>
+        <p>Get overall info about the user's balance.</p>
+        <p>Request:</p>
+
+        <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+            <tr>
+                <td>site-key</td>
+                <td>Your site key, that you can find in dashboard by clicking on `Generate` button</td>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>Username attached to your site</td>
+            </tr>
+        </table>
+
+        <p>Response:</p>
+
+        <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+            <tr>
+                <td>message</td>
+                <td><code>{ "name": string, "reward": int, "withdrawn": int, "hashes": int, "hashRate": string }</code> || fail message</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>success || failure</td>
+            </tr>
+        </table>
+
+        <!-- USER LIST -->
+        <h2 class="mb-3 subtitle" id="user-list"><a href="#user-list"><font-awesome-icon icon="link"></font-awesome-icon></a>user/list</h2>
+
+        <p>Method: <span class="badge badge-success w-auto">GET</span></p>
+        <p>Get the list of active users by site. </p>
+        <p>Request:</p>
+
+        <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+            <tr>
+                <td>site-key</td>
+                <td>Your site key, that you can find in dashboard by clicking on `Generate` button</td>
+            </tr>
+        </table>
+
+        <p>Response:</p>
+
+        <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+            <tr>
+                <td>message</td>
+                <td><code>[ "awesome-user", "awesome-user-two" ]</code> || fail message</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>success || failure</td>
+            </tr>
+        </table>
+
+        <!-- USER WITHDRAW -->
+        <h2 class="mb-3 subtitle" id="user-withdraw"><a href="#user-withdraw"><font-awesome-icon icon="link"></font-awesome-icon></a>user/withdraw</h2>
+
+        <p>Method: <span class="badge badge-warning w-auto">POST</span></p>
+        <p>Withdraw the user's funds.</p>
+        <p>Request:</p>
+
+        <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+            <tr>
+                <td>site-key</td>
+                <td>Your site key, that you can find in dashboard by clicking on `Generate` button</td>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>Username attached to your site</td>
+            </tr>
+            <tr>
+                <td>amount</td>
+                <td>Amount to be withdrawn</td>
+            </tr>
+        </table>
+
+        <p>Response:</p>
+
+        <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-sm table-responsive-md">
+            <tr>
+                <td>message</td>
+                <td><code>{ "name": string, "reward": int, "withdrawn": int, "hashes": int, "pending": int, "hashRate": string }</code> || fail message</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>success || failure</td>
+            </tr>
+        </table>
+    </template>
+{% endblock %}

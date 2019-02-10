@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}{% endblock %}
+
+{% block contentContainerClass %}{{ parent() }} error-wrapper{% endblock %}
+
+{% block contentClass %}page-error page-404{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-5 px-0">
+        <div class="row no-gutters">
+            <div class="col-xs-12 col-md-8 error-text">
+                <span class="title-big">Oops!</span>
+                <span class="title-small">There is nobody here</span>
+                <hr>
+                <p>The page you were looking for appears to have been moved, deleted or doesn't exist. You can go back to the <a href="#" onClick="window.history.back();">previous page</a> or to our <a href="{{ path('homepage') }}">home page</a>.</p>
+                <span class="subtitle">Error 404</span>
+            </div>
+            <div class="col-4 d-none d-md-block text-right imp-leaving"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

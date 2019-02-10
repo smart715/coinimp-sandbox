@@ -1,0 +1,12 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends 'form.html.twig' %}
+
+{% set formHeader = "Change Password" %}
+{% block formBody %}
+    {{ form_start(form, {'method': 'post', 'action': path('password_resetting_request')}) }}
+    {{ form_widget(form) }}
+    <div class="form-group text-center">
+        <input type="submit" class="btn btn-primary" value="Change password" />
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

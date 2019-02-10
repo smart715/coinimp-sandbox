@@ -1,0 +1,61 @@
+# This file is a template, and might need editing before it works on your project.
+# see https://docs.gitlab.com/ce/ci/yaml/README.html for all available options
+
+# *********************
+# ATENTION: PLEASE, DON'T EDIT THIS FILE IF YOU ARE NOT AN ADMIN!!
+# IF YOU HAVE ANY DOUBT, PLEASE CONTACT TO ANY SYSADMIN..
+# *********************
+
+stages:
+  - update-repository
+  - unit-tests
+  - build-sites
+  - clean-unused-sites
+
+update_repository_redmine_training.abchosting.org:
+  stage: update-repository
+  script:
+    - cd /home/git/gitlab/coinimp-sandbox.git && sudo git fetch --all -p
+  tags:
+    # this job will be executed only on training.abchosting.org server
+    - training.abchosting.org    
+
+phpunit_tests_coinimp.abchosting.org:
+  stage: unit-tests
+  script:
+    - coverage-control.sh -b $CI_COMMIT_REF_NAME
+    - composer install --no-scripts 
+    - ./vendor/bin/phpunit --coverage-text --color=never
+  tags:
+    # This job only will be executed by this runner:
+    - coinimp.abchosting.org
+  only:
+    # this job only will be executed for branches
+    - branches
+    
+build_coinimp_sites_coinimp.abchosting.org:
+  stage: build-sites
+  script:
+    - SRC=$(pwd)
+    - sudo build-sites-coinimp.sh -a build -b $CI_COMMIT_REF_NAME -s $SRC
+  tags:
+    # This job only will be executed by this runner:
+    - coinimp.abchosting.org
+  only:
+    # this job only will be executed for branches
+    - /^sandbox-.*$/
+    - /^sb-.*$/
+    
+clean_coinimp_sites_coinimp.abchosting.org:
+  stage: clean-unused-sites
+  script:
+    - sudo clean-unused-sites-sandbox-coinimp.py
+  tags:
+    # This job only will be executed by this runner:
+    - coinimp.abchosting.org
+  only:
+    # this job only will be executed for branches named
+    # v*.*.* (v3.1.6), master
+    #- /^v\d{1,2}[.]\d{1,2}[.]\d{1,2}$/
+    - master
+  allow_failure: true  

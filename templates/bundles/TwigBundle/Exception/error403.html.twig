@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}{% endblock %}
+
+{% block contentContainerClass %}{{ parent() }} error-wrapper{% endblock %}
+
+{% block contentClass %}page-error page-403{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-xs-12 col-lg-12 mb-4 mx-auto"><img src="{{ asset('build/images/error403.png') }}" class="img-fluid mx-auto d-block"></div>
+        <div class="row justify-content-center">
+            <div class="text-center">
+                <span class="title-big pr-4 pl-4">This action needs valid API keys.</span>
+                <p class="col-7 mx-auto mt-2">You don't have permission to access this page. You can go back to the <a href="#" onClick="window.history.back();">previous page</a> or to our <a href="{{ path('homepage') }}">home page</a>.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

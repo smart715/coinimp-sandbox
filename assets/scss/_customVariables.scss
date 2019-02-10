@@ -1,0 +1,60 @@
+/** --- Custom Variables --- **/
+$body-text-color: #37474f;
+$open-sans-font: 'Open Sans', sans-serif;
+$oxygen-font: 'Oxygen', sans-serif;
+$oswald-font: 'Oswald', sans-serif;
+
+/** --- Bootstrap Variables --- **/
+$container-max-widths: (
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px
+);
+
+// Colors
+$primary: #448aff;
+$secondary: #e6e6e6;
+
+// Buttons
+$input-btn-padding-y: .5rem;
+$input-btn-padding-x: 1.4rem;
+$btn-border-radius: 0;
+
+// Navbar
+$navbar-light-color: #227bd4;
+$navbar-light-hover-color: rgba($navbar-light-color,.7);
+$navbar-light-disabled-color: rgba($navbar-light-color,.3);
+$gray-100: #f9f9f9;
+
+// Headings
+$headings-font-family: $oxygen-font;
+$headings-color: #1a1a1a;
+
+// Modals
+$modal-content-border-width: 0;
+$modal-content-border-color: #e6e6e6;
+$modal-lg: 960px;
+
+// Card
+$card-border-radius: 0;
+$card-border-color: #e6e6e6;
+
+// Input forms
+$input-bg: #e6e6e6;
+$input-border-radius: 0;
+$input-btn-border-width: 0;
+$input-btn-focus-color: #e6e6e6;
+
+$custom-control-indicator-bg: #e6e6e6;
+$custom-checkbox-indicator-border-radius: 0;
+
+$custom-select-bg: #e6e6e6;
+$custom-select-border-radius: 0;
+
+// Alerts
+$alert-border-radius: 0;
+
+// total users count block
+$user-count-block-color: #333333;
+$user-count-block-bg: #e6e6e6;

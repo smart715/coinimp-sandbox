@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block contentClass %}wallet{% endblock %}
+
+{% block title %}{{ formHeader }} | CoinImp{% endblock %}
+
+{% block content %}
+    <div class="container py-4" id="wallet">
+        <login-alert
+            v-if="showLoginAlert"
+            @click-login="handleLoginAlert"
+        >
+        </login-alert>
+        <div v-cloak>
+            <div v-if="showInsufficientBalance" class="alert alert-danger" id="alert-insufficient-balance">
+                You have not reached the minimum payout limit yet.
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col">
+                <span class="currency-title align-middle mr-3">Currency</span>
+                <div class="d-inline-block">
+                    <a href="{{ path('wallet', {'crypto': 'xmr'}) }}" class="mr-2 btn {{ crypto == 'xmr' ? 'btn-dark' : 'btn-secondary' }}">Monero</a>
+                    <a href="{{ path('wallet', {'crypto': 'web'}) }}" class="btn {{ crypto == 'web' ? 'btn-dark' : 'btn-secondary' }}">Webchain</a>
+                </div>
+            </div>
+        </div>
+        <div class="row py-3 justify-content-center">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        {{ formHeader }}
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        {{ form_row(form.walletAddress, { 'attr': {
+                            'oninvalid': 'setCustomValidity("Invalid wallet address")',
+                            'onchange': 'try{setCustomValidity("")}catch(e){}',
+                            'oninput': 'try{setCustomValidity("")}catch(e){}'
+                        }}) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <p class="mt-2 text-center form-note">
+                    {% if crypto == 'xmr' %}
+                        You can create your wallet at <a href="https://mymonero.com" rel="nofollow" target="_blank">mymonero.com</a> for example.<br>
+                        To conveniently cash out your Monero, use this <a href="https://localmonero.co/?rc=1pw6" rel="nofollow" target="_blank">Local Monero Service</a>.<br>
+                    {% endif %}
+                    {% if crypto == 'web' %}
+                        You can create your wallet via <a href="https://github.com/webchain-network/webchain-wallet/releases" rel="nofollow" target="_blank">GUI Wallet</a>.<br>
+                        To exchange your WEB to BTC use <a href="https://app.stocks.exchange/en/basic-trade/pair/BTC/WEB" rel="nofollow" target="_blank">Stocks.exchange</a> or <a href="https://bitebtc.com/trade/web_btc" rel="nofollow" target="_blank">BiteBTC</a>.<br>
+                    {% endif %}
+                    You can order payout when your account reaches {{ minimalPayout }} {{ crypto|upper }}, we also deduct network fee: {{ paymentFee }} {{ crypto|upper }}.
+                </p>
+                <p>
+                    <div v-cloak v-if="showUserReward">
+                        <span>
+                            You have <strong>{[ totalReward|toXMR ]} {{ crypto|upper }}</strong>
+                            {% if crypto == 'xmr' %}
+                                <span v-if="displayTotalRewardInUSD">
+                                    worth <strong>{[ totalReward|toRate(usdRate)]} USD.</strong>
+                                </span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                <span class="loading-content" v-else>
+                    <i class="fa fa-circle-notch fa-spin"></i>
+                    Loading...</span>
+
+                </p>
+                <div class="col-12 text-center mt-2">
+                    <button class="btn btn-primary" id="pay-button" @click="confirmPayout()">Pay</button>
+                </div>
+                <input type="hidden" id="total-wallet-amount" value="{{ total }}">
+                <input type="hidden" id="minimal-payout" value="{{ minimalPayout * 10**12 }}">
+                <input type="hidden" id="stats-refresh-rate" value="{{ global_statsRefreshRate }}">
+                <input type="hidden" id="payment-fee" value="{{ paymentFee }}">
+                <input type="hidden" id="crypto-symbol" value="{{ crypto }}">
+            </div>
+        </div>
+        {% include 'default/payment_history.html.twig' with {'crypto': crypto} %}
+
+        <modal v-show="showModal" @close="hideModal()" class="primary-modal" id="payment-modal" v-cloak>
+            <h2 slot="header" class="modal-title">Confirm Payment</h2>
+            <div slot="body">
+                <form @submit="submitPayment" action="{{ path('payout', {'crypto': crypto}) }}" method="post">
+                <div class="row">
+                    <div class="col-12 table-responsive">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Wallet Address:</th>
+                                <td>
+                                    <div class="preview-field" tabindex="0" data-simplebar>
+                                        <span>{{ walletAddress }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% if crypto == 'xmr' and walletAddress|length == 95 %}
+                                <tr>
+                                    <th>Payment ID:</th>
+                                    <td>
+                                        <input class="w-100" v-model="paymentId" name="paymentId" minlength="64" maxlength="64">
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <th>Request:</th>
+                                <td>
+                                    <div class="d-flex">
+                                        <input-number
+                                                name="quantity"
+                                                v-validate="inputNumberValidation({{ minimalPayout }})"
+                                                step=".00000001" min="{{ minimalPayout }}"
+                                                :max="totalReward|toXMR"
+                                                v-model="quantitySelectorXMR">
+                                        </input-number>
+                                        <span class="ml-2">{{ crypto|upper }}</span>
+                                    </div>
+                                    <small class="text-danger d-block m-0">{[ errors.first('quantity') ]}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Fee:</th>
+                                <td>{{ paymentFee|number_format(8, '.', ' ') }} {{ crypto|upper }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total to be paid:</th>
+                                <td><span class="total-reward-with-fee">{[ quantitySelectorXMRWithFee ]}</span> {{ crypto|upper }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary" id="confirm-pay-btn">Confirm Payment</button>
+                        <button type="button" class="btn btn-default" id="cancel-pay-btn" @click="hideModal()">Cancel</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </modal>
+    </div>
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('build/wallet.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,42 @@
+App\Entity\Payment:
+    type: entity
+    repositoryClass: App\Repository\PaymentRepository
+
+    manyToOne:
+        profile:
+            targetEntity: Profile
+            inversedBy: payments
+        transaction:
+            targetEntity: App\Entity\Payment\Transaction
+        crypto:
+            targetEntity: Crypto
+            cascade: [ 'persist' ]
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        amount:
+            type: bigint
+
+        fee:
+            type: bigint
+
+        status:
+            type: PaymentStatus
+
+        timestamp:
+            column: '`timestamp`'
+            type: datetime
+
+        isManual:
+            type: boolean
+
+        walletAddress:
+            nullable: true
+
+        paymentId:
+            nullable: true

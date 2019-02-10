@@ -1,0 +1,40 @@
+App\Entity\Site:
+    type:  entity
+    repositoryClass: App\Repository\SiteRepository
+
+    manyToOne:
+        profile:
+            targetEntity: Profile
+            inversedBy: sites
+        crypto:
+            targetEntity: Crypto
+            cascade: [ 'persist' ]
+
+    oneToMany:
+        shares:
+            targetEntity: HashesShare
+            mappedBy: site
+            cascade: [ 'persist', 'remove' ]
+            orphanRemoval: true
+        users:
+            targetEntity: App\Entity\SiteUser
+            mappedBy: site
+            cascade: [ 'persist', 'remove' ]
+            orphanRemoval: true
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        name: ~
+        miningKey: ~
+        type:
+            type: integer
+        words: ~
+        reward:
+            type: bigint
+        referralReward:
+            type: bigint

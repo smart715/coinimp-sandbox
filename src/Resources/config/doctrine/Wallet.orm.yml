@@ -1,0 +1,20 @@
+App\Entity\Wallet:
+    type: entity
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    manyToOne:
+        profile:
+            targetEntity: Profile
+            inversedBy: wallets
+        crypto:
+            targetEntity: Crypto
+            cascade: [ 'persist' ]
+
+    fields:
+        address:
+            type: string

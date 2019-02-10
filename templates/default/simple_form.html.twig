@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block contentClass %}wrap-main-form{% endblock %}
+
+{% block title %}{{ formHeader }} | CoinImp{% endblock %}
+
+{% block content %}
+    <div class="py-4">
+        {% embed('form.html.twig') %}
+            {% block formBody %}{{ form(form) }}{% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}

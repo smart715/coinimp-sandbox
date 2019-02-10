@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}{% endblock %}
+
+{% block contentContainerClass %}{{ parent() }} error-wrapper{% endblock %}
+
+{% block contentClass %}page-error page-500{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-5 px-0">
+        <div class="row no-gutters justify-content-center">
+            <div class="col-xs-12 col-lg-8 col-xl-6 text-center error-text">
+                <span class="title-big">Error 500</span>
+                <hr>
+                <p>Our Imp was hit by a rock while mining coins and he's a little dizzy!</p>
+            </div>
+        </div>
+        <div class="imp-dizzy"></div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

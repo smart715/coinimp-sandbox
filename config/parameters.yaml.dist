@@ -1,0 +1,243 @@
+# This file is a "template" of what your parameters.yaml file has to look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    # Database configuration: host, port, its name, user and password:
+    database_host: sql11.freemysqlhosting.net
+    database_port: 3306
+    database_name: sql11206794
+    database_user: sql11206794
+    database_password: VEYHjhdnUa
+
+    # Social Media Login Configuration Keys: Google API Key:
+    google_client_id: '234379856267-gjlfa0vohbikgrhlblcbl2rb9h6v2je7.apps.googleusercontent.com'
+    google_client_secret: 'RQi0eTrLO6Pryn3slqinUMGd'
+
+    #Token Sale date:
+    token_sale_date: 'October 30, 2018 00:00:00'
+
+    # Mail configuration - it is required for sending e.g. registration confirmation
+    # emails, and also for the Contact Form.
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: user
+    mailer_password: pass
+
+    # URL from which users will download the miner script.
+    # This URL also will be shown in documentation
+    # and dashboard (when user views embeddable script code without PHP proxy):
+    miner_url: 'https://www.freecontent.stream.'
+
+    # URL from which users will download the PHP proxy script.
+    # This URL also will be shown in dashboard
+    # (when user views embeddable script code using PHP proxy).
+    scripts_url: 'http://wasm.stream'
+
+    # The URL of cryptocompare.com API endpoint, which is used for converting XMR to USD:
+    currency_converter_url: 'https://min-api.cryptocompare.com/data/price'
+
+    # The URL of main page of exchange site 'cryptocompare.com':
+    exchange_url: 'https://www.cryptocompare.com'
+
+    # The name of exchange site:
+    exchange_name: 'cryptocompare'
+
+    # Maximum timeout of the request to the cryptocompare.com API endpoint.
+    # Accepts an integer value:
+    currency_converter_response_timeout_seconds: 10
+
+    # API URL used to fetch site stats (hashes, hash_rate)
+    # from pool-aggregator microservice
+    pool_aggregator_url: 'http://localhost:3057'
+
+    # It is possible to specify SSH tunnel to the pool in case of indirect connection.
+    # If null ("~") is specified, panel communicates with pool directly (without SSH tunnel).
+    # Alternatively, specify "host" and "port" options of the already running SSH tunnel like below:
+    pool_ssh_tunnel:
+        host: localhost
+        port: 12346
+
+    # Timeout for requests to the each of pools (used to fetch hashes count or hashrate).
+    # Accepts an integer value:
+    pool_response_timeout_seconds: 10
+
+    # Configuration of supported currencies
+    supported_currencies:
+        # Name of currency. Some services depends on the name, be carefully when edit it.
+        # TODO: get rid of such dependencies
+        monero:
+            # Currency symbol
+            symbol: 'xmr'
+
+            # The fee applied to payouts, in percents.
+            # The resulting payout percentage is displayed in Dashboard for each user,
+            # and is used during pending reward calculation.
+            # (Resulting payout percentage = 100% - payout_fee_percentage).
+            # Accepts a float value. "2" means 98% payout.
+            payout_fee_percentage: 1
+
+            # The fee applied to payouts in case of disable ads, in percents.
+            # The resulting payout percentage is displayed in Dashboard for each user,
+            # and is used during pending reward calculation.
+            # (Resulting payout percentage = 100% - payout_fee_percentage).
+            # Accepts a float value. "2" means 98% payout.
+            payout_fee_without_ads_percentage: 5
+
+            # Orphan blocks, in percents
+            # Used as fee, applied to payout per million and pending reward,
+            # and it's displayed in Dashboard as part of pool stats.
+            # In code it's called orphan fee percentage
+            # Accepts a float value.
+            orphan_blocks_percentage: 2
+
+            # The minimum payout threshold, after which user can trigger a payout, in XMR.
+            # Accepts a float value. "0.2" means 0.2 XMR.
+            minimal_payout: 0.2
+
+            # The fee applied to the mining hashes count and hashrate.
+            # This fee is not directly visible by the user.
+            # Accepts a float value.
+            mining_reward_fee_percentage: 2
+
+            # The fee applied to the network difficulty - it gets increased by given amount of percents.
+            # Accepts a float value. "0" means no increase.
+            difficulty_increase_percentage: 1
+
+            # The amount of XMRs subtracted from each payout.
+            # This value is shown to user in his payouts list, in payout dialog and in wallet page.
+            # Accepts a float value. "0.02" means 0.02 XMR.
+            payment_fee: 0.02
+
+            # The URL of daemon API endpoint:
+            daemon: 'http://localhost:18081'
+
+            # Timeout for requests to daemon.
+            # Accepts an integer value:
+            daemon_response_timeout_seconds: 10
+
+            # Allowed lengths of wallet address which user can input,
+            # e.g. 95 for regular Monero address, 106 for Monero integrated address or 98 for shitcoin address
+            allowed_wallet_lengths: [95, 98, 106]
+
+            # URL of the external service for viewing Monero transactions.
+            # Used in the main landing page for the list of recent payouts
+            # and in the list of payouts in the wallet page.
+            explorer_url: 'https://chainradar.com/xmr/transaction'
+
+        webchain:
+            symbol: 'web'
+            payout_fee_percentage: 1
+            payout_fee_without_ads_percentage: 5
+            orphan_blocks_percentage: 2
+            minimal_payout: 0.2
+            mining_reward_fee_percentage: 2
+            difficulty_increase_percentage: 1
+            payment_fee: 0.02
+            daemon: 'http://localhost:39573'
+            daemon_response_timeout_seconds: 10
+            allowed_wallet_lengths: [42]
+            explorer_url: 'https://explorer.webchain.network/tx'
+
+    # The percentage of how much the referrers earn from each of their's referral.
+    # This value is displayed on referral promotion page,
+    # and used during referral reward calculation.
+    # Accepts a float value.
+    referral_percentage: 1
+
+    # Email address used as recipient for the contact form's messages,
+    # and also for notification about comments for News section.
+    # Accepts a valid email address.
+    support_email: 'support@coinimp.com'
+
+    # The interval between AJAX requests from Dashboard to panel in order to fetch stats from pools:
+    stats_refresh_rate_seconds: 10
+
+    # ReCAPTCHA configuration:
+    recaptcha_public_key: PutPublicKey
+    recaptcha_private_key: PutPrivateKey
+
+    # RabbitMQ configuration. It is used for communicating with coinimp-payment service:
+    rabbitmq_host: 'localhost'
+    rabbitmq_port: 5672
+    rabbitmq_user: 'guest'
+    rabbitmq_password: 'guest'
+    rabbitmq_vhost: /
+
+    # URL of a site on Blogspot used as immediate redirection tunnel to coinimp.com
+    # to overcome Facebook share issues:
+    blogspot_url: 'https://coinimp.blogspot.com/'
+
+    # The interval of fetching network stats from monerod in minutes.
+    # Accepts only integer values:
+    network_data_cache_expiry_minutes: 5
+
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    # The interval between AJAX requests from index page to panel in order to fetch current registered users count:
+    users_count_refresh_rate_seconds: 60
+
+    # Information about our results on main page
+    total_embedded_script_views: '1.409.718.200'
+
+    # Youtube video id used on token sale page
+    youtube_video_id: RUgWvv9VUBY
+
+    # full path for log dir
+    log_path: './var/log'
+
+    #Coinimp Invest Gateway API parameters.
+    invest_url: 'http://212.32.255.139:8082/json_rpc'
+    invest_timeout_seconds: 5
+
+    # Turn on or off pre sale to control IMP counter (switch it between soft-cap goal and Hard-cap goal)
+    is_pre_sale: true
+
+    #system wallets
+    airdrops_wallet: 'airdrops'
+    tokensale_wallet: 'tokensale'
+
+    # Referencer commission coefficient
+    tokensale_commission_percentage: .05
+
+    #total initial amounts in the wallets
+    presale_wallet_amount: 20000000
+    tokensale_wallet_amount: 320000000
+
+    # Minimum amount of IMP to deposit
+    deposit_imp_min_amount: 1000
+
+    # IMP price in USD
+    imp_price_in_usd: 0.01
+
+    # Invest currency symbols
+    invest_currency_symbols:
+        - XMR
+        - BTC
+        - ETH
+
+    #amount of imp that assigned for a single user as an airdrops
+    airdrops_value: 500
+
+    #aidrops end date
+    airdrops_end_date: 'January 30, 2019 00:00:00'
+
+    # Deposit IMP bonus packages
+    deposit_imp_bonus_packages:
+        -   amount: 10000
+            bonusValue: 500
+        -   amount: 100000
+            bonusValue: 10000
+        -   amount: 1000000
+            bonusValue: 150000
+        -   amount: 10000000
+            bonusValue: 2000000
+
+    #viralsweep lightbox codes parts ex. src="https://app.viralsweep.com/vsa-lightbox-{viralsweep[2]}-{viralsweep[0]}.js?sid={viralsweep[0]}_{viralsweep[1]}"
+    viralsweep:
+        - 45741
+        - 900727
+        - ab5d37
+
+    # activate the option that allow user to add our advertisement
+    ads_option: true

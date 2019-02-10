@@ -1,0 +1,10 @@
+App\Entity\News\Post:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: news__post
+
+    id:
+        id:
+           type: integer
+           generator:
+                strategy: AUTO

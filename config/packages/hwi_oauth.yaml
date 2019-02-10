@@ -1,0 +1,15 @@
+hwi_oauth:
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_name: main
+    connect:
+        account_connector: my.oauth_aware.user_provider.service
+    resource_owners:
+        google:
+            type:                google
+            client_id:           '%google_client_id%'
+            client_secret:       '%google_client_secret%'
+            scope:              "email profile"
+            paths:
+                email: email
+            options:
+                csrf: true

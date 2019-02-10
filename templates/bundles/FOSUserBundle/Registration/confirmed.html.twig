@@ -1,0 +1,51 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block contentClass %}signup-confirmed py-4{% endblock %}
+
+{% block fos_user_content %}
+    <div class="container py-4" id="signup-confirmed">
+        <div class="row align-items-center">
+            <div class="col-5 d-none d-md-block text-center">
+                <img src="{{ asset('build/images/imp-successful.png') }}" class="imp-confirmed img-fluid">
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <p>The user has been created successfully</p>
+                <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+                <div class="mb-3">
+                    <a href="https://twitter.com/coinimp" rel="nofollow" target="_blank" class="btn btn-primary btn-twitter">
+                        Follow us on 
+                        <font-awesome-layers class="fa-lg">
+                            <font-awesome-icon :icon="['fab','twitter-square']"></font-awesome-icon> 
+                        </font-awesome-layers>
+                    </a>
+                    <a href="https://www.reddit.com/r/CoinImp/" rel="nofollow" target="_blank" class="btn btn-primary btn-reddit">
+                        Follow us on 
+                        <font-awesome-layers class="fa-lg">
+                            <font-awesome-icon :icon="['fab','reddit-square']"></font-awesome-icon> 
+                        </font-awesome-layers>
+                    </a>
+                    <a href="https://www.facebook.com/coinimp/" rel="nofollow" target="_blank" class="btn btn-primary btn-facebook">
+                        Follow us on 
+                        <font-awesome-layers class="fa-lg">
+                            <font-awesome-icon :icon="['fab','facebook-square']"></font-awesome-icon> 
+                        </font-awesome-layers>
+                    </a>
+                </div>
+                <p>
+                    {% if targetUrl is empty %}
+                        <a href="{{ path('dashboard') }}">Go to Dashboard.</a>
+                    {% else %}
+                        <a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock fos_user_content %}
+
+{% block pagescripts %}
+    <script src="{{ asset('build/confirmed.js') }}"></script>
+{% endblock %}
+

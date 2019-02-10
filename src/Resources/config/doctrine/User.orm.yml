@@ -1,0 +1,31 @@
+App\Entity\User:
+    type:  entity
+    table: "`user`"
+    repositoryClass: App\Repository\UserRepository
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        createdAt:
+            type: datetime
+            nullable: true
+        tempEmail:
+            type: string
+            nullable: true
+        googleID:
+            type: string
+            nullable: true
+
+    oneToOne:
+        key:
+            targetEntity: ApiKey
+            mappedBy: user
+            cascade: [ 'persist', 'remove' ]
+            orphanRemoval: true
+        googleAuthenticatorEntry:
+            targetEntity: GoogleAuthenticatorEntry
+            mappedBy: user
+            cascade: [ 'persist', 'remove' ]

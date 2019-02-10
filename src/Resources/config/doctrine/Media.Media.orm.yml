@@ -1,0 +1,10 @@
+App\Entity\Media\Media:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: media__media
+
+    id:
+        id:
+           type: integer
+           generator:
+                strategy: AUTO

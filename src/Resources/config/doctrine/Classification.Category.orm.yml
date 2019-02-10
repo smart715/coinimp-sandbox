@@ -1,0 +1,10 @@
+App\Entity\Classification\Category:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: classification__category
+
+    id:
+        id:
+           type: integer
+           generator:
+                strategy: AUTO

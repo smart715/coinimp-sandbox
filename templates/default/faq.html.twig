@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{% spaceless %}
+    Frequently Asked Questions | CoinIMP
+{% endspaceless %}
+{% endblock %}
+
+{% block contentClass %}faq{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="page-title">FAQ - Frequently Asked Questions</h1>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <ul>
+                <li><a href="#what-is-cryptocurrency">What is Cryptocurrency?</a></li>
+                <li><a href="#what-is-monero-xmr">What is Monero (XMR)?</a></li>
+                <li><a href="#what-is-mining">What is mining?</a></li>
+                <li><a href="#how-cryptocurrencies-transactions-are-confirmed">How Cryptocurrencies transactions are confirmed?</a></li>
+                <li><a href="#what-is-monero-javascript-mining">What is Monero JavaScript Mining?</a></li>
+                <li><a href="#why-monero">Why Monero?</a></li>
+                <li><a href="#what-is-hash-rate">What is Hash rate?</a></li>
+                <li><a href="#what-is-network-difficulty">What is Network Difficulty?</a></li>
+                <li><a href="#what-is-block-reward">What is Block Reward?</a></li>
+                <li><a href="#what-is-theAdvertisement-option">What is the advertisement option?</a></li>
+            </ul>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2 id="what-is-cryptocurrency" class="question-title">What is Cryptocurrency?</h2>
+            </div>
+            <div class="col-12">
+                <p>Cryptocurrency (or crypto currency) is a term derived from "Cryptography"<sup>[1]</sup> which refers to a method or technique that involves conversion of information or data into non-readable or protected content in such a way that only authorized parties can access it and those who are not authorized cannot; and "Currency" which refers to all kinds of currencies that can be used as a medium of exchange<sup>[2]</sup>. Cryptocurrencies are classified as "Digital or Virtual Currencies".</p>
+                <p class="annotation">[1] Cryptography: constructing and analyzing protocols that prevent third parties or the public from accessing data.</p>
+                <p class="annotation">[2] Medium of Exchange: Intermediary used in trades to facilitate sales and avoid exchange inconveniences.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-monero-xmr" class="question-title">What is Monero (XMR)?</h2>
+            </div>
+            <div class="col-12">
+                <p>Monero founded on April 2014, is an open source Cryptocurrency that was forked by a team that has chosen to stay anonymous with help from very well-known developers on this matter such as Riccardo Spagni a.k.a "fluffypony" and David Latapie between the most relevant ones. Monero is based on the CryptoNote<sup>[3]</sup> system. It has special features like complete control of your transactions, fungibility, anonymity, security, superior mining algorithm and adaptability.</p>
+                <p class="annotation">[3] CryptoNote: Application layer protocol that powers several decentralized privacy oriented digital currencies.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-mining" class="question-title">What is mining?</h2>
+            </div>
+            <div class="col-12">
+                <p>In the digital currencies system, it refers to the process where data transactions permanently recorded in files (blocks) are validated and therefore stored to a shared transactions database (Blockchain), also called Public ledger, by all nodes participating in the system. It uses CPU or GPU resources to solve computational puzzles. Mining is measured by the hash rate.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="how-cryptocurrencies-transactions-are-confirmed" class="question-title">How Cryptocurrencies transactions are confirmed?</h2>
+            </div>
+            <div class="col-12">
+                <p>Most cryptocurrencies use a peer-to-peer system that work like an organized collective by allowing each individual to interact directly with the others. Each peer has a previous history of transactions and balance from every account, for example "Person A gives a specific amount of cryptocurrency to Person B", this transaction has a file in a peer signed by Person A's private key (public key of cryptography) then, this transaction will be sent to all other peers. Cryptocurrencies are all about nodes’ confirmation.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-monero-javascript-mining" class="question-title">What is Monero JavaScript Mining?</h2>
+            </div>
+            <div class="col-12">
+                <p>It’s a mining method based on JavaScript, applicable to browsers, for the purpose of mining Monero (XMR) by using visitors’ CPU power. Main purpose is to monetize any website while also providing better features to users such as advertisement removal.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="why-monero" class="question-title">Why Monero?</h2>
+            </div>
+            <div class="col-12">
+                <p>Monero uses CryptoNight hash algorithms that were better designed for CPUs to make it safer than other cryptocurrencies. Monero is untraceable, eliminating the possibility of identifying any particular user, unlinkable since it generates multiple unique one-time addresses that can only be linked by the payment receiver, unfeasable to be revealed through blockchain analysis.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-hash-rate" class="question-title">What is Hash rate?</h2>
+            </div>
+            <div class="col-12">
+                <p>Total output of hashes computed in the mining process per second, in other words, a measure of processing power. High hash rate increases probability of finding a block.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-network-difficulty" class="question-title">What is Network Difficulty?</h2>
+            </div>
+            <div class="col-12">
+                <p>Network Difficulty is a measurement to show how difficult it is to find a new block below the given target of any cryptocurrency that can be mined through proof-of-work. It is strictly related to total hash rate of network miners.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-block-reward" class="question-title">What is Block Reward?</h2>
+            </div>
+            <div class="col-12">
+                <p>The amount that miners may claim as a reward for creating a block.</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h2 id="what-is-theAdvertisement-option" class="question-title">What is the advertisement option?</h2>
+            </div>
+            <div class="col-12">
+                <p>You will find this option in the "Get the code" section from the dashboard. If this option is ticked, your fee will be lowered to 1% but your users will see our add maximum once per month. Otherwise your fee increases to 5%</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+App\Entity\News\Comment:
+    type: entity
+    repositoryClass: Doctrine\ORM\EntityRepository
+    table: news__comment
+
+    id:
+        id:
+           type: integer
+           generator:
+                strategy: AUTO

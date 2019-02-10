@@ -1,0 +1,19 @@
+App\Entity\HashesShare:
+    type:  entity
+
+    manyToOne:
+        site:
+            targetEntity: Site
+            inversedBy: shares
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+
+    fields:
+        hashes:
+            type: bigint
+        fee:
+            type: float

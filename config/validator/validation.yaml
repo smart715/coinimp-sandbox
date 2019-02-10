@@ -1,0 +1,34 @@
+App\Entity\Media\Media:
+    properties:
+            binaryContent:
+                - Image:
+                    maxSize: 2M
+
+App\Entity\Site:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [ 'name', 'profile', 'crypto' ]
+            message: 'Site with such name already exists'
+
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [ 'miningKey' ]
+            message: 'Error creating site, please try again'
+
+    properties:
+        name:
+            - Length:
+                max: 60
+                maxMessage: 'Site name is too long'
+
+App\Entity\User:
+    properties:
+        plainPassword:
+            - App\Validator\Constraints\UserPassword: ~
+
+App\Form\Model\EditEmail:
+    properties:
+        email:
+            - NotBlank: ~
+            - Email:
+                message: 'Invalid email address.'
+            - App\Validator\Constraints\UserEmail: ~

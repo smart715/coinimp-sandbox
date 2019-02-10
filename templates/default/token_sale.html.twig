@@ -1,0 +1,219 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Token Sale | CoinImp
+{% endblock %}
+
+{% block contentClass %}ico{% endblock %}
+
+{% block content %}
+    <div id="token-sale">
+        <section id="initial-section">
+            <div class="container">
+                <div class="row pt-3 ">
+                    <div class="col-md-12 col-xl-7">
+                        <div class="row text-center text-xl-left">
+                            <div class="col-md-12 mt-4">
+                                <h1 class="title">The <b>Token Sale</b> of an upcoming <br> revolution in <b>web monetization</b></h1>
+                                <p class="mt-4 mb-0">IMP is a blockchain based token designed to be the most profitable
+                                    way for webmasters to generate revenue.
+                                </p>
+                            </div>
+                            <div class="col-md-12 actions">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button @click="showVideo = true" class="btn btn-primary-dark btn-lg
+                                        btn-video text-uppercase">
+                                            <font-awesome-icon :icon="['fas','play-circle']"></font-awesome-icon>
+                                            Watch it work
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="{{ path('white_paper') }}" target="_blank" class="btn btn-primary-dark ico-main-btn btn-lg btn-paper
+                                        text-uppercase">
+                                            <font-awesome-icon :icon="['far','file-pdf']"></font-awesome-icon>
+                                            White Paper
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-cloak>
+                            <token-sale-progress-counter
+                                url="{{ path('api_get_sold_imp') }}"
+                                is-pre-sale="{{ global_isPreSale }}"
+                                imp-usd-rate="{{ global_imp_price_in_usd }}"
+                            >
+                            </token-sale-progress-counter>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-5 d-flex flex-column px-0 mt-4 mt-lg-0">
+                        <img src="{{ asset('build/images/imp-ico.svg') }}" class="img-fluid align-self-center countdown-imp" alt="imp coinimp ico" {% if global_token_sale_date|date('Y-m-d H:i:s') < 'now'|date('Y-m-d H:i:s') %} style="z-index: 2;" {% endif %}>
+                        <div class="countdown d-flex flex-column position-relative">
+                            <div class="timer text-center" id="countdown">
+                                <count-down end-date="{{global_token_sale_date}}" current-date="{{ 'now'|date('Y-m-d H:i:s') }}">
+                                </count-down>
+                            </div>
+                            <div class="text-center buy-action">
+                                <a href="{{ path('buy') }}" class="btn btn-danger btn-lg text-uppercase" role="button" v-cloak>
+                                    <div>SIGN UP FOR THE TOKEN SALE!</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="imp-price-section" class="py-3 text-white position-relative">
+            <div class="container">
+                <div class="text-white col-12 text-center">
+                <span class="title">
+                    1 IMP (bought during token sale) = {{ global_imp_price_in_usd }} USD = 1000 impressions
+                </span>
+                </div>
+            </div>
+        </section>
+
+        {% if global_airdrops_end_date|date('Y-m-d H:i:s') > 'now'|date('Y-m-d H:i:s') %}
+        <div id="airdrop-row" ref="airdropsRow" class="position-relative text-center">
+            <section id="airdrop-section" class="py-5 text-white">
+                <div class="container">
+                    <input type="hidden" id="parachute-url" ref="parachuteUrl" value="{{ asset('build/images/parachute.png') }}">
+                    <div class="row text-white">
+                        <div class="col-12">
+                            <span class="title d-block mb-4">A total of <b> 25 000 000 IMP </b>
+                                tokens will be given away as airdrops
+                            </span>
+                            <a href="{{ path('buy') }}#airdrop-row" class="btn btn-success btn-lg title-lead text-uppercase">
+                                Participate
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% endif %}
+
+        <section id="features-section" class="py-5 text-center text-lg-left">
+            <div class="container">
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-12 col-lg-3 d-none d-lg-block">
+                        <img src="{{ asset('build/images/icon-offering.png') }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-12 col-lg-9 feature-text">
+                        <h1 class="text-center text-lg-left">Token sale</h1>
+                        <p>IMP is a utility token that focuses on the functionality of today's advertising. We're not only changing the rules of the CPM game, but paving the way for the future of web advertising;  IMP tokens guarantee the possibility to maintain a website, from revenue to hosting, and create an economic environment based on impressions generated through websites without having to exchange to other currencies.</p>
+                    </div>
+                </div>
+                <div class="row align-items-center my-3">
+                    <div class="col-md-12 col-lg-3 order-lg-2 d-none d-lg-block">
+                        <img src="{{ asset('build/images/icon-profitability.png') }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-12 col-lg-9 feature-text order-lg-1">
+                        <h1 class="text-center text-lg-left">CPM Advertising</h1>
+                        <p>CoinIMP advertising plan, based on the Cost per Thousand Impressions, based on paying website owners for each impression. CPM is just the beginning of the roadmap to our goal of revolutionizing web monetization. Read the white paper and find out more!</p>
+                    </div>
+                </div>
+                <div class="row align-items-center my-3">
+                    <div class="col-md-12 col-lg-3 d-none d-lg-block">
+                        <img src="{{ asset('build/images/icon-airdrops.png') }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-12 col-lg-9 feature-text">
+                        <h1 class="text-center text-lg-left">IMP Airdrops</h1>
+                        <p>
+                            A total of 25 million IMP tokens will be distributed among users
+                            who are eligible to apply for the airdrop.  Want to be sure if you are one of them? Check
+                            the rules and regulations on <a href="{{ path('buy') }}"> <b>buy page.
+                            </b></a> This is a free way to obtain tokens.
+                        </p>
+                    </div>
+                </div>
+                <div class="row align-items-center my-3">
+                    <div class="col-md-12 col-lg-3 order-lg-2 d-none d-lg-block">
+                        <img src="{{ asset('build/images/icon-security.png') }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-12 col-lg-9 feature-text order-lg-1">
+                        <h1 class="text-center text-lg-left">Security of Transactions</h1>
+                        <p>IMP is a webchain-based utility token. Webchain is an open source blockchain  to allow the development of DApps based on ERC20 & ERC23 smart contracts. It offers secure and transparent transactions.</p>
+                    </div>
+                </div>
+                <div class="row align-items-center my-3">
+                    <div class="col-md-12 col-lg-3 d-none d-lg-block">
+                        <img src="{{ asset('build/images/icon-trajectory.png') }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-12 col-lg-9 feature-text">
+                        <h1 class="text-center text-lg-left">Success is Contagious</h1>
+                        <p>The team behind IMP launched a completely safe, adjustable, and hardware-friendly mining script provided through CoinIMP service which has been producing revenues to their clients ever since 2017. This is also the team behind Webchain, a blockchain made to secure DApps using regular CPUs, following ERC20 and ERC223 standards. This token is backed up by the success of a hosting network that operates worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ceo-quote-section" class="text-center text-xl-left py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xl-4 mb-4 mb-xl-0">
+                        <img src="{{ asset('build/images/profile_artur-makówka-juice.jpg') }}" class="img-fluid">
+                    </div>
+                    <div class="col-12 col-xl-8">
+                        <p>"With IMP, we’re pointing towards the staging of a new standard in web profitability, and far from blindfolded promises, these intentions are based on a working, profiting product. While most other Token Sales ask you to invest in the unknown, we stand out from our history of successful and fast delivery of solutions. Just some months ago, CoinIMP was introduced to the world and rapidly gained its place as the most profitable web miner on the network, today we’re going much further, performing a quantum leap towards the consecution of truly self-sustainable websites.”</p>
+                        <span>Artur Makówka - CEO</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% include 'default/tokensale_roadmap.html.twig' %}
+
+        <section id="investment-recall-section" class="py-5 text-center text-lg-left text-white">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-12 col-lg-7 order-2 order-lg-1">
+                        <h1 class="text-white">
+                            Be part of this revolution of web monetization: Register for the Token Sale!
+                        </h1>
+                        <p> IMP Token Sale is only available for a short period of time. Be smart  and buy your tokens  while it’s possible:</p>
+                        <a href="{{ path('buy') }}" class="btn btn-primary-dark btn-lg">Hold your IMP tokens</a>
+                    </div>
+                    <div class="col-md-12 col-lg-5 order-1 order-lg-2 text-center">
+                        <img src="{{ asset('build/images/imp-head.png') }}" class="img-fluid imp-head" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="members-section" class="py-5 d-flex">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-12 mb-5">
+                        <h1 class="main">Team Members</h1>
+                    </div>
+                    {% include 'default/team_members.html.twig' %}
+                </div>
+            </div>
+        </section>
+
+        <div v-if="showVideo" class="modal" tabindex="-1" role="dialog" v-cloak>
+            <div class="modal-dialog modal-lg">
+                <youtube
+                    class="youtube-player"
+                    video-id="{{ global_youtubeVideoId }}"
+                    :player-vars="playerOptions"
+                    @ready="videoReady"
+                    @ended="videoEnded"
+                    v-click-outside="exitVideo">
+                </youtube>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/token-sale.css') }}">
+{% endblock %}
+
+{% block pagescripts %}
+    <script src="{{ asset('build/token-sale.js') }}"></script>
+{% endblock %}

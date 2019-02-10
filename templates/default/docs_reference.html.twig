@@ -1,0 +1,209 @@
+{% extends 'default/documentation.html.twig' %}
+
+{% block contentSection %}
+    <h1 class="mb-4 title">Configuration Monero JavaScript mining</h1>
+
+    <h2 class="mb-3 subtitle" id="Client.Anonymous"><a href="#Client.Anonymous"><font-awesome-icon icon="link"></font-awesome-icon></a>Client.Anonymous</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">Client</span>.Anonymous(&lt;site-key&gt;, [options]);</code></pre>
+    <p>Constructor of miner object. Takes one or two arguments:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsivfont-size: 1.5rem;e-md">
+        <tr>
+            <td>site-key</td>
+            <td>String. Hexadecimal, 64 characters-length key. You can use one key on more than one domain. Statistics for sites with the same site-key are merged in user panel.</td>
+        </tr>
+        <tr>
+            <td>options</td>
+            <td>Object. It contains fields which set behaviour of miner. See table below for details.</td>
+        </tr>
+    </table>
+    <p>Possible options:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>throttle</td>
+            <td>Float. Sets maximum CPU usage by miner. For example to limit usage to 30% it should be 0.7</td>
+        </tr>
+        <tr>
+            <td>threads</td>
+            <td>Integer. Set fixed number of mining threads. Default value is equal to navigator.hardwareConcurrency - count of logical processor cores.</td>
+        </tr>
+        <tr>
+            <td>autoThreads</td>
+            <td>Bool. If true, adjust number of threads automatically. Default value is false.</td>
+        </tr>
+        <tr>
+            <td>forceASMJS</td>
+            <td>Bool. If true, asm.js implementation of miner will be forced. Otherwise faster WebAssembly version will be used if supported. Default value is false.</td>
+        </tr>
+    </table>
+
+    <h2 class="mb-3 subtitle" id="Client.User"><a href="#Client.User"><font-awesome-icon icon="link"></font-awesome-icon></a>Client.User</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">Client</span>.User(&lt;site-key&gt;, &lt;username&gt;, [options]);</code></pre>
+    <p>Miner object builder - It can take two or three arguments:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsivfont-size: 1.5rem;e-md">
+        <tr>
+            <td>site-key</td>
+            <td>String. Hexadecimal, 64 characters-length key. You can use one key on more than one domain. Statistics for sites with the same site-key are merged in user panel.</td>
+        </tr>
+        <tr>
+            <td>username</td>
+            <td>String. Any string to identify your site user.</td>
+        </tr>
+        <tr>
+            <td>options</td>
+            <td>Object. It contains fields that define the behevior of the miner. See the table below for details.</td>
+        </tr>
+    </table>
+    <p>Possible options:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>throttle</td>
+            <td>Float. Sets max CPU usage by miner. For example, to limit the CPU usage to 30%, the value should be 0.7.</td>
+        </tr>
+        <tr>
+            <td>threads</td>
+            <td>Integer. Sets fixed number of mining threads. The default value is equal to navigator.hardwareConcurrency - count of logical processor cores.</td>
+        </tr>
+        <tr>
+            <td>autoThreads</td>
+            <td>Bool. The default value is false. If true, threads will be automatically adjusted.</td>
+        </tr>
+        <tr>
+            <td>forceASMJS</td>
+            <td> Bool. If true, asm.js will be used for implementing the miner. If false, WebAssembly will be used when supported. False is set by default.</td>
+        </tr>
+    </table>
+
+    <h2 class="mt-5 mb-3 subtitle" id="start"><a href="#start"><font-awesome-icon icon="link"></font-awesome-icon></a>start()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">miner</span>.start([mode]);</code></pre>
+    <p>Starts mining. Takes zero or one argument:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>mode</td>
+            <td>Enum. Specifies conditions of starting mining. See table below for possible modes. Default value is Client.IF_EXCLUSIVE_TAB</td>
+        </tr>
+    </table>
+    <p>Modes:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>Client.IF_EXCLUSIVE_TAB</td>
+            <td>Start mining only if no other miner on given domain is active. When other tab with miner will be closed, current miner will start working.</td>
+        </tr>
+        <tr>
+            <td>Client.FORCE_EXCLUSIVE_TAB</td>
+            <td>Start mining and stop miners on the same domain which don’t have Client.FORCE_MULTI_TAB option.</td>
+        </tr>
+        <tr>
+            <td>Client.FORCE_MULTI_TAB</td>
+            <td>Start mining even if other miners is active.</td>
+        </tr>
+    </table>
+
+    <h2 class="mt-5 mb-3 subtitle" id="stop"><a href="#stop"><font-awesome-icon icon="link"></font-awesome-icon></a>stop()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">miner</span>.stop();</code></pre>
+    <p>Stops mining. Takes zero arguments.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="isRunning"><a href="#isRunning"><font-awesome-icon icon="link"></font-awesome-icon></a>isRunning()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">running</span> = <span class="hljs-variable">miner</span>.isRunning();</code></pre>
+    <p>Returns true if miner is started, false otherwise.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="isMobile"><a href="#isMobile"><font-awesome-icon icon="link"></font-awesome-icon></a>isMobile()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">onMobile</span> = <span class="hljs-variable">miner</span>.isMobile();</code></pre>
+    <p>Returns true if mobile device detected, false otherwise. It can be used to start mining only on desktops and laptops.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="hasWASMSupport"><a href="#hasWASMSupport"><font-awesome-icon icon="link"></font-awesome-icon></a>hasWASMSupport()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">wasmEnabled</span> = <span class="hljs-variable">miner</span>.hasWASMSupport();</code></pre>
+    <p>Returns true if WebAssembly is supported and enabled, false if asm.js implementation is used.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="getAutoThreadsEnabled"><a href="#getAutoThreadsEnabled"><font-awesome-icon icon="link"></font-awesome-icon></a>getAutoThreadsEnabled()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">isAutoThreads</span> = <span class="hljs-variable">miner</span>.getAutoThreadsEnabled();</code></pre>
+    <p>Returns true if autoThreads was enabled, false otherwise. See Client.Anonymous() description for details.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="setAutoThreadsEnabled"><a href="#setAutoThreadsEnabled"><font-awesome-icon icon="link"></font-awesome-icon></a>setAutoThreadsEnabled()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">miner</span>.setAutoThreadsEnabled(enable);</code></pre>
+    <p>Enables or disables autoThreads. Takes one argument:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>enable</td>
+            <td>Boolean. If true, enable autoThreads feature. See Client.Anonymous() description for details.</td>
+        </tr>
+    </table>
+
+    <h2 class="mt-5 mb-3 subtitle" id="getHashesPerSecond"><a href="#getHashesPerSecond"><font-awesome-icon icon="link"></font-awesome-icon></a>getHashesPerSecond()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">hps</span> = <span class="hljs-variable">miner</span>.getHashesPerSecond();</code></pre>
+    <p>Returns number of hashes calculated per second.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="getNumThreads"><a href="#getNumThreads"><font-awesome-icon icon="link"></font-awesome-icon></a>getNumThreads()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">threads</span> = <span class="hljs-variable">miner</span>.getNumThreads();</code></pre>
+    <p>Returns number of threads used for mining.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="setNumThreads"><a href="#setNumThreads"><font-awesome-icon icon="link"></font-awesome-icon></a>setNumThreads()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">miner</span>.setNumThreads(threads);</code></pre>
+    <p>Sets number of threads used for mining. Takes one argument:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>threads</td>
+            <td>Integer. Number of mining threads.</td>
+        </tr>
+    </table>
+
+    <h2 class="mt-5 mb-3 subtitle" id="getThrottle"><a href="#getThrottle"><font-awesome-icon icon="link"></font-awesome-icon></a>getThrottle()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">throttle</span> = <span class="hljs-variable">miner</span>.getThrottle();</code></pre>
+    <p>Returns value from range 0.0 to 1.0. For example value 0.3 means that CPU usage is limited to 70%.</p>
+
+    <h2 class="mt-5 mb-3 subtitle" id="setThrottle"><a href="#setThrottle"><font-awesome-icon icon="link"></font-awesome-icon></a>setThrottle()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">miner</span>.setThrottle(throttle);</code></pre>
+    <p>Sets CPU limit. Takes one argument:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>throttle</td>
+            <td>Float. Value from range 0.0 to 1.0. For example value 0.3 means that CPU usage is limited to 70%.</td>
+        </tr>
+    </table>
+
+    <h2 class="mt-5 mb-3 subtitle" id="getTotalHashes"><a href="#getTotalHashes"><font-awesome-icon icon="link"></font-awesome-icon></a>getTotalHashes()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js"><span class="hljs-variable">hashes</span> = <span class="hljs-variable">miner</span>.getTotalHashes([interpolate]);</code></pre>
+    <p>Returns total count of hashes calculated since miner was created. Takes zero or one argument:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>interpolate</td>
+            <td>If is set to true then miner will estimate total hashes between of refreshes to provide smoothly increasing number. Default value is false.</td>
+        </tr>
+    </table>
+
+    <h2 class="mt-5 mb-3 subtitle" id="on"><a href="#on"><font-awesome-icon icon="link"></font-awesome-icon></a>on()</h2>
+    <pre @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout"><code class="hljs js">on(<span class="hljs-variable">event</span>, callback(<span class="hljs-variable">args</span>) {});</code></pre>
+    <p>Adds callback for given event. Takes two arguments:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>event</td>
+            <td>String. Name of the event you want add callback to.</td>
+        </tr>
+        <tr>
+            <td>callback</td>
+            <td>Function to call when given event occurs.</td>
+        </tr>
+    </table>
+    <p>Possible events:</p>
+    <table @touchstart.passive="disableSlideout" @touchend.passive="enableSlideout" class="table table-responsive-md">
+        <tr>
+            <td>'open'</td>
+            <td>Connection to pool was established.</td>
+        </tr>
+        <tr>
+            <td>'close'</td>
+            <td>Connection to pool was closed.</td>
+        </tr>
+        <tr>
+            <td>'error'</td>
+            <td>An error occurred. args.error contains string with error type.</td>
+        </tr>
+        <tr>
+            <td>'job'</td>
+            <td>New mining job was received from pool.</td>
+        </tr>
+        <tr>
+            <td>'found'</td>
+            <td>Job was calculated and will be send to pool.</td>
+        </tr>
+    </table>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% if description|length > 0 %}
+    {% spaceless %}
+    	<p class="text-center">{{ description }}</p>
+    {% endspaceless %}
+{% endif %}
+{% set errormsg = app.request.query.get('error') %}
+{% set editmode = app.request.query.get('edit') %}
+{% block formBody %}
+    {{ form_start(form) }}
+    {{ app.request.query.get('sitename') }}
+    {% if errormsg  == true %}
+        {% if editmode  == true %}
+            {{ form_label(form.name, 'New name') }}
+        {% else %}
+            {{ form_label(form.name, 'Name') }}
+        {% endif %}    
+        <div class="p-2 mb-2 bg-danger text-white text-center">Enter a valid site name, it can be neither empty nor longer than 60 characters.</div>
+        {{ form_row(form.name, {'label': false}) }}
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}
